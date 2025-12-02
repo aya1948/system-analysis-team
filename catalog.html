@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Library - Book Catalog</title>
+    <link rel="stylesheet" href="styles/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <div class="logo-icon">
+                        <i class="fas fa-book"></i>
+                    </div>
+                    <div class="logo-text">
+                        <h1>Digital Library</h1>
+                        <p>Your Window to Knowledge</p>
+                    </div>
+                </div>
+                <nav>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="catalog.html" class="active">Catalog</a></li>
+                        <li><a href="borrowings.html">My Borrowings</a></li>
+                        <li><a href="about.html">About</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </nav>
+                <div class="user-actions">
+                    <!-- Will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container py-5">
+        <h1 class="text-center mb-4">Book Catalog</h1>
+        
+        <!-- Search and Filter -->
+        <div class="catalog-controls">
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="Search for books or authors...">
+                <button type="button" id="searchBtn"><i class="fas fa-search"></i></button>
+            </div>
+            
+            <div>
+                <span>Show:</span>
+                <select class="form-control" id="availabilityFilter" style="display: inline-block; width: auto;">
+                    <option value="all">All Books</option>
+                    <option value="available">Available Only</option>
+                    <option value="popular">Most Popular</option>
+                </select>
+            </div>
+        </div>
+        
+        <!-- Categories -->
+        <div class="categories">
+            <button class="category-btn active" data-category="all">All</button>
+            <button class="category-btn" data-category="Self-Development">Self-Development</button>
+            <button class="category-btn" data-category="Fiction">Fiction</button>
+            <button class="category-btn" data-category="Psychology">Psychology</button>
+            <button class="category-btn" data-category="Relationships">Relationships</button>
+            <button class="category-btn" data-category="Science">Science</button>
+            <button class="category-btn" data-category="History">History</button>
+        </div>
+        
+        <!-- Books Grid -->
+        <div class="books-grid mt-3" id="booksGrid">
+            <!-- Will be populated by JavaScript -->
+        </div>
+        
+        <!-- Pagination -->
+        <div class="pagination">
+            <a href="#" class="page-link">Previous</a>
+            <a href="#" class="page-link active">1</a>
+            <a href="#" class="page-link">2</a>
+            <a href="#" class="page-link">3</a>
+            <a href="#" class="page-link">4</a>
+            <a href="#" class="page-link">5</a>
+            <a href="#" class="page-link">Next</a>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Digital Library</h3>
+                    <p>We are an electronic platform aiming to provide books and references for Arab readers worldwide.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="catalog.html">Catalog</a></li>
+                        <li><a href="about.html">About</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                        <li><a href="login.html">Login</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Contact Us</h3>
+                    <div class="footer-contact">
+                        <p><i class="fas fa-envelope"></i> info@elibrary.com</p>
+                        <p><i class="fas fa-phone"></i> +1 234 567 890</p>
+                        <p><i class="fas fa-map-marker-alt"></i> New York, USA</p>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>All rights reserved &copy; Digital Library 2023</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="js/main.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/books.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load all books initially
+            loadAllBooks();
+            
+            // Search functionality
+            document.getElementById('searchBtn').addEventListener('click', searchBooks);
+            document.getElementById('searchInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    searchBooks();
+                }
+            });
+            
+            // Category filter
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    // Update active button
+                    document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    const category = this.dataset.category;
+                    filterByCategory(category);
+                });
+            });
+            
+            // Availability filter
+            document.getElementById('availabilityFilter').addEventListener('change', function() {
+                filterByAvailability(this.value);
+            });
+            
+            // Initialize header
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            const userActions = document.querySelector('.user-actions');
+            if (currentUser) {
+                userActions.innerHTML = `
+                    <div class="user-profile">
+                        <span>Welcome, ${currentUser.name}</span>
+                        <a href="#" class="btn btn-outline" id="logoutBtn">Logout</a>
+                    </div>
+                `;
+                
+                document.getElementById('logoutBtn').addEventListener('click', function() {
+                    localStorage.removeItem('currentUser');
+                    window.location.href = 'index.html';
+                });
+            } else {
+                userActions.innerHTML = `
+                    <a href="login.html" class="btn btn-outline">Login</a>
+                    <a href="register.html" class="btn btn-primary">Register</a>
+                `;
+            }
+        });
+        
+        function loadAllBooks() {
+            const books = JSON.parse(localStorage.getItem('books')) || [];
+            displayBooks(books);
+        }
+        
+        function displayBooks(books) {
+            const booksGrid = document.getElementById('booksGrid');
+            booksGrid.innerHTML = '';
+            
+            if (books.length === 0) {
+                booksGrid.innerHTML = '<p class="text-center" style="grid-column: 1/-1;">No books found</p>';
+                return;
+            }
+            
+            books.forEach(book => {
+                const bookCard = document.createElement('div');
+                bookCard.className = 'book-card';
+                bookCard.innerHTML = `
+                    <div class="book-cover">
+                        <img src="${book.cover}" alt="${book.title}">
+                    </div>
+                    <div class="book-info">
+                        <h3 class="book-title">${book.title}</h3>
+                        <p class="book-author">${book.author}</p>
+                        <span class="book-category">${book.category}</span>
+                        <div class="book-actions">
+                            <a href="book-details.html?id=${book.id}" class="btn btn-primary btn-small">View Details</a>
+                            <button class="btn ${book.available ? 'btn-outline' : 'btn-secondary'} btn-small borrow-btn" 
+                                    data-id="${book.id}" 
+                                    ${!book.available ? 'disabled' : ''}>
+                                ${book.available ? 'Borrow' : 'Unavailable'}
+                            </button>
+                        </div>
+                    </div>
+                `;
+                
+                const borrowBtn = bookCard.querySelector('.borrow-btn');
+                if (borrowBtn && book.available) {
+                    borrowBtn.addEventListener('click', function() {
+                        borrowBook(book.id);
+                    });
+                }
+                
+                booksGrid.appendChild(bookCard);
+            });
+        }
+        
+        function searchBooks() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const books = JSON.parse(localStorage.getItem('books')) || [];
+            
+            if (!query.trim()) {
+                displayBooks(books);
+                return;
+            }
+            
+            const filteredBooks = books.filter(book => 
+                book.title.toLowerCase().includes(query) ||
+                book.author.toLowerCase().includes(query) ||
+                book.category.toLowerCase().includes(query) ||
+                book.description.toLowerCase().includes(query)
+            );
+            
+            displayBooks(filteredBooks);
+        }
+        
+        function filterByCategory(category) {
+            const books = JSON.parse(localStorage.getItem('books')) || [];
+            
+            if (category === 'all') {
+                displayBooks(books);
+                return;
+            }
+            
+            const filteredBooks = books.filter(book => book.category === category);
+            displayBooks(filteredBooks);
+        }
+        
+        function filterByAvailability(availability) {
+            const books = JSON.parse(localStorage.getItem('books')) || [];
+            
+            switch(availability) {
+                case 'all':
+                    displayBooks(books);
+                    break;
+                case 'available':
+                    const availableBooks = books.filter(book => book.available);
+                    displayBooks(availableBooks);
+                    break;
+                case 'popular':
+                    // For demo, show books with rating > 4.5
+                    const popularBooks = books.filter(book => book.rating > 4.5);
+                    displayBooks(popularBooks);
+                    break;
+            }
+        }
+        
+        function borrowBook(bookId) {
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            if (!currentUser) {
+                alert('Please login to borrow books');
+                window.location.href = 'login.html';
+                return;
+            }
+            
+            const books = JSON.parse(localStorage.getItem('books')) || [];
+            const book = books.find(b => b.id === parseInt(bookId));
+            
+            if (!book) {
+                alert('Book not found');
+                return;
+            }
+            
+            if (!book.available) {
+                alert('This book is not available');
+                return;
+            }
+            
+            // Check if user already borrowed this book
+            let borrowings = JSON.parse(localStorage.getItem('borrowings')) || [];
+            const existingBorrowing = borrowings.find(b => 
+                b.userId === currentUser.id && 
+                b.bookId === bookId && 
+                b.status === 'active'
+            );
+            
+            if (existingBorrowing) {
+                alert('You have already borrowed this book');
+                return;
+            }
+            
+            // Create new borrowing
+            const newBorrowing = {
+                id: borrowings.length + 1,
+                userId: currentUser.id,
+                bookId: book.id,
+                borrowDate: new Date().toISOString().split('T')[0],
+                dueDate: getDueDate(14),
+                returnDate: null,
+                status: 'active'
+            };
+            
+            // Update book copies
+            book.copies -= 1;
+            if (book.copies <= 0) {
+                book.available = false;
+            }
+            
+            // Save data
+            borrowings.push(newBorrowing);
+            localStorage.setItem('borrowings', JSON.stringify(borrowings));
+            localStorage.setItem('books', JSON.stringify(books));
+            
+            alert(`Successfully borrowed "${book.title}"`);
+            
+            // Refresh display
+            displayBooks(books);
+        }
+        
+        function getDueDate(days) {
+            const date = new Date();
+            date.setDate(date.getDate() + days);
+            return date.toISOString().split('T')[0];
+        }
+    </script>
+</body>
+</html>

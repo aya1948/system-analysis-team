@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Library - Manage Books</title>
+    <link rel="stylesheet" href="styles/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <div class="logo-icon">
+                        <i class="fas fa-book"></i>
+                    </div>
+                    <div class="logo-text">
+                        <h1>Digital Library</h1>
+                        <p>Admin Dashboard</p>
+                    </div>
+                </div>
+                <nav>
+                    <ul>
+                        <li><a href="index.html">Main Site</a></li>
+                        <li><a href="admin-dashboard.html">Dashboard</a></li>
+                        <li><a href="admin-books.html" class="active">Manage Books</a></li>
+                    </ul>
+                </nav>
+                <div class="user-actions">
+                    <!-- Will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Admin Content -->
+    <div class="admin-container">
+        <!-- Sidebar -->
+        <aside class="admin-sidebar">
+            <nav>
+                <ul class="sidebar-nav">
+                    <li><a href="admin-dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                    <li><a href="admin-books.html" class="active"><i class="fas fa-book"></i> Manage Books</a></li>
+                    <li><a href="#"><i class="fas fa-users"></i> Manage Users</a></li>
+                    <li><a href="#"><i class="fas fa-exchange-alt"></i> Manage Borrowings</a></li>
+                    <li><a href="#"><i class="fas fa-chart-bar"></i> Reports & Statistics</a></li>
+                    <li><a href="#"><i class="fas fa-cog"></i> Settings</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="admin-content">
+            <div class="admin-header">
+                <h1>Manage Books</h1>
+                <button class="btn btn-primary" id="addBookBtn"><i class="fas fa-plus"></i> Add New Book</button>
+            </div>
+            
+            <!-- Search and Filter -->
+            <div class="catalog-controls mb-4">
+                <div class="search-box">
+                    <input type="text" id="adminSearch" placeholder="Search books...">
+                    <button type="button" id="adminSearchBtn"><i class="fas fa-search"></i></button>
+                </div>
+                
+                <div>
+                    <select class="form-control" id="categoryFilter" style="display: inline-block; width: auto;">
+                        <option value="all">All Categories</option>
+                        <option value="Self-Development">Self-Development</option>
+                        <option value="Fiction">Fiction</option>
+                        <option value="Psychology">Psychology</option>
+                        <option value="Relationships">Relationships</option>
+                        <option value="Science">Science</option>
+                        <option value="History">History</option>
+                    </select>
+                    
+                    <select class="form-control" id="availabilityFilter" style="display: inline-block; width: auto;">
+                        <option value="all">All Status</option>
+                        <option value="available">Available</option>
+                        <option value="borrowed">Borrowed</option>
+                        <option value="unavailable">Unavailable</option>
+                    </select>
+                </div>
+            </div>
+            
+            <!-- Books Table -->
+            <div class="table-responsive">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Cover</th>
+                            <th>Book Title</th>
+                            <th>Author</th>
+                            <th>Category</th>
+                            <th>Status</th>
+                            <th>Copies</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="adminBooksTable">
+                        <!-- Will be populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- No Books Message -->
+            <div id="noBooksMessage" class="text-center mt-5" style="display: none;">
+                <i class="fas fa-book" style="font-size: 4rem; color: var(--gray); margin-bottom: 1rem;"></i>
+                <h3>No Books Found</h3>
+                <p>No books match your search criteria. Try a different search or add new books.</p>
+                <button class="btn btn-primary mt-3" id="addFirstBookBtn"><i class="fas fa-plus"></i> Add First Book</button>
+            </div>
+            
+            <!-- Pagination -->
+            <div class="pagination mt-4">
+                <a href="#" class="page-link">Previous</a>
+                <a href="#" class="page-link active">1</a>
+                <a href="#" class="page-link">2</a>
+                <a href="#" class="page-link">3</a>
+                <a href="#" class="page-link">4</a>
+                <a href="#" class="page-link">5</a>
+                <a href="#" class="page-link">Next</a>
+            </div>
+        </main>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Digital Library</h3>
+                    <p>We are an electronic platform aiming to provide books and references for Arab readers worldwide.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="index.html">Main Site</a></li>
+                        <li><a href="admin-dashboard.html">Dashboard</a></li>
+                        <li><a href="admin-books.html">Manage Books</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Contact Us</h3>
+                    <div class="footer-contact">
+                        <p><i class="fas fa-envelope"></i> admin@elibrary.com</p>
+                        <p><i class="fas fa-phone"></i> +1 234 567 890</p>
+                        <p><i class="fas fa-map-marker-alt"></i> New York, USA</p>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>All rights reserved &copy; Digital Library 2023 - Admin Panel</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="js/main.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/admin.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if user is admin
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            if (!currentUser || currentUser.role !== 'admin') {
+                alert('Admin access required');
+                window.location.href = 'index.html';
+                return;
+            }
+            
+            // Initialize header
+            updateHeader();
+            
+            // Load books
+            loadAdminBooks();
+            
+            // Setup event listeners
+            setupEventListeners();
+        });
+        
+        function updateHeader() {
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            const userActions = document.querySelector('.user-actions');
+            if (currentUser) {
+                userActions.innerHTML = `
+                    <div class="user-profile">
+                        <span>System Admin</span>
+                        <a href="#" class="btn btn-outline" id="logoutBtn">Logout</a>
+                    </div>
+                `;
+                
+                document.getElementById('logoutBtn').addEventListener('click', function() {
+                    localStorage.removeItem('currentUser');
+                    window.location.href = 'index.html';
+                });
+            }
+        }
+        
+        function loadAdminBooks() {
+            const books = JSON.parse(localStorage.getItem('books')) || [];
+            const booksTable = document.getElementById('adminBooksTable');
+            const noBooksMessage = document.getElementById('noBooksMessage');
+            
+            if (books.length === 0) {
+                booksTable.innerHTML = '';
+                noBooksMessage.style.display = 'block';
+                return;
+            }
+            
+            noBooksMessage.style.display = 'none';
+            booksTable.innerHTML = '';
+            
+            books.forEach(book => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>
+                        <img src="${book.cover}" alt="${book.title}" style="width: 50px; height: 70px; object-fit: cover; border-radius: 4px;">
+                    </td>
+                    <td><strong>${book.title}</strong></td>
+                    <td>${book.author}</td>
+                    <td>${book.category}</td>
+                    <td><span class="status-badge ${book.available ? 'status-active' : 'status-overdue'}">
+                        ${book.available ? 'Available' : 'Unavailable'}
+                    </span></td>
+                    <td>${book.copies}</td>
+                    <td>
+                        <div class="table-actions">
+                            <button class="btn btn-success btn-small edit-book-btn" data-id="${book.id}">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn btn-danger btn-small delete-book-btn" data-id="${book.id}">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                            <a href="book-details.html?id=${book.id}" class="btn btn-outline btn-small">
+                                <i class="fas fa-eye"></i>
+                            </a>
+                        </div>
+                    </td>
+                `;
+                booksTable.appendChild(row);
+            });
+            
+            // Add event listeners to action buttons
+            document.querySelectorAll('.edit-book-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    editBook(this.dataset.id);
+                });
+            });
+            
+            document.querySelectorAll('.delete-book-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    deleteBook(this.dataset.id);
+                });
+            });
+        }
+        
+        function setupEventListeners() {
+            // Add Book button
+            document.getElementById('addBookBtn').addEventListener('click', showAddBookModal);
+            document.getElementById('addFirstBookBtn').addEventListener('click', showAddBookModal);
+            
+            // Search functionality
+            document.getElementById('adminSearchBtn').addEventListener('click', searchBooks);
+            document.getElementById('adminSearch').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    searchBooks();
+                }
+            });
+            
+            // Filter functionality
+            document.getElementById('categoryFilter').addEventListener('change', filterBooks);
+            document.getElementById('availabilityFilter').addEventListener('change', filterBooks);
+        }
+        
+        function showAddBookModal() {
+            const modalContent = `
+                <form id="addBookForm">
+                    <div class="form-group">
+                        <label for="bookTitle">Book Title *</label>
+                        <input type="text" id="bookTitle" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="bookAuthor">Author *</label>
+                        <input type="text" id="bookAuthor" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="bookCategory">Category *</label>
+                        <select id="bookCategory" class="form-control" required>
+                            <option value="">Select Category</option>
+                            <option value="Self-Development">Self-Development</option>
+                            <option value="Fiction">Fiction</option>
+                            <option value="Psychology">Psychology</option>
+                            <option value="Relationships">Relationships</option>
+                            <option value="Science">Science</option>
+                            <option value="History">History</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="bookDescription">Description *</label>
+                        <textarea id="bookDescription" class="form-control" rows="3" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="bookPages">Number of Pages</label>
+                        <input type="number" id="bookPages" class="form-control" min="1" value="300">
+                    </div>
+                    <div class="form-group">
+                        <label for="bookYear">Publication Year</label>
+                        <input type="number" id="bookYear" class="form-control" min="1900" max="2023" value="2023">
+                    </div>
+                    <div class="form-group">
+                        <label for="bookRating">Rating (1-5)</label>
+                        <input type="number" id="bookRating" class="form-control" min="1" max="5" step="0.1" value="4.0">
+                    </div>
+                    <div class="form-group">
+                        <label for="bookCopies">Number of Copies *</label>
+                        <input type="number" id="bookCopies" class="form-control" min="1" value="5" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="bookCover">Cover Image URL</label>
+                        <input type="url" id="bookCover" class="form-control" placeholder="https://example.com/image.jpg">
+                        <small>Leave empty for default cover image</small>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary">Add Book</button>
+                        <button type="button" class="btn btn-outline" onclick="closeModal()">Cancel</button>
+                    </div>
+                </form>
+            `;
+            
+            const modal = document.createElement('div');
+            modal.className = 'modal';
+            modal.innerHTML = `
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3>Add New Book</h3>
+                        <button class="modal-close">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        ${modalContent}
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            
+            setTimeout(() => {
+                modal.classList.add('show');
+            }, 100);
+            
+            // Close modal on X click
+            modal.querySelector('.modal-close').addEventListener('click', () => {
+                closeModal();
+            });
+            
+            // Close modal on outside click
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    closeModal();
+                }
+            });
+            
+            // Handle form submission
+            modal.querySelector('#addBookForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                addNewBook();
+            });
+        }
+        
+        function addNewBook() {
+            const books = JSON.parse(localStorage.getItem('books')) || [];
+            
+            const newBook = {
+                id: books.length > 0 ? Math.max(...books.map(b => b.id)) + 1 : 1,
+                title: document.getElementById('bookTitle').value,
+                author: document.getElementById('bookAuthor').value,
+                category: document.getElementById('bookCategory').value,
+                description: document.getElementById('bookDescription').value,
+                pages: parseInt(document.getElementById('bookPages').value) || 300,
+                year: parseInt(document.getElementById('bookYear').value) || 2023,
+                rating: parseFloat(document.getElementById('bookRating').value) || 4.0,
+                available: true,
+                copies: parseInt(document.getElementById('bookCopies').value) || 5,
+                cover: document.getElementById('bookCover').value || 'https://images.unsplash.com/photo-1541963463532-d68292c34b19?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80'
+            };
+            
+            // Add book to collection
+            books.push(newBook);
+            localStorage.setItem('books', JSON.stringify(books));
+            
+            alert('Book added successfully!');
+            closeModal();
+            loadAdminBooks();
+        }
+        
+        function editBook(bookId) {
+            const books = JSON.parse(localStorage.getItem('books')) || [];
+            const book = books.find(b => b.id === parseInt(bookId));
+            
+            if (!book) {
+                alert('Book not found');
+                return;
+            }
+            
+            const modalContent = `
+                <form id="editBookForm" data-id="${book.id}">
+                    <div class="form-group">
+                        <label for="editBookTitle">Book Title *</label>
+                        <input type="text" id="editBookTitle" class="form-control" value="${book.title}" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editBookAuthor">Author *</label>
+                        <input type="text" id="editBookAuthor" class="form-control" value="${book.author}" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editBookCategory">Category *</label>
+                        <select id="editBookCategory" class="form-control" required>
+                            <option value="Self-Development" ${book.category === 'Self-Development' ? 'selected' : ''}>Self-Development</option>
+                            <option value="Fiction" ${book.category === 'Fiction' ? 'selected' : ''}>Fiction</option>
+                            <option value="Psychology" ${book.category === 'Psychology' ? 'selected' : ''}>Psychology</option>
+                            <option value="Relationships" ${book.category === 'Relationships' ? 'selected' : ''}>Relationships</option>
+                            <option value="Science" ${book.category === 'Science' ? 'selected' : ''}>Science</option>
+                            <option value="History" ${book.category === 'History' ? 'selected' : ''}>History</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="editBookDescription">Description *</label>
+                        <textarea id="editBookDescription" class="form-control" rows="3" required>${book.description}</textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="editBookPages">Number of Pages</label>
+                        <input type="number" id="editBookPages" class="form-control" value="${book.pages}" min="1">
+                    </div>
+                    <div class="form-group">
+                        <label for="editBookYear">Publication Year</label>
+                        <input type="number" id="editBookYear" class="form-control" value="${book.year}" min="1900" max="2023">
+                    </div>
+                    <div class="form-group">
+                        <label for="editBookRating">Rating (1-5)</label>
+                        <input type="number" id="editBookRating" class="form-control" value="${book.rating}" min="1" max="5" step="0.1">
+                    </div>
+                    <div class="form-group">
+                        <label for="editBookCopies">Number of Copies *</label>
+                        <input type="number" id="editBookCopies" class="form-control" value="${book.copies}" min="0" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editBookAvailable">Availability</label>
+                        <select id="editBookAvailable" class="form-control" required>
+                            <option value="true" ${book.available ? 'selected' : ''}>Available</option>
+                            <option value="false" ${!book.available ? 'selected' : ''}>Unavailable</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="editBookCover">Cover Image URL</label>
+                        <input type="url" id="editBookCover" class="form-control" value="${book.cover}">
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary">Update Book</button>
+                        <button type="button" class="btn btn-outline" onclick="closeModal()">Cancel</button>
+                    </div>
+                </form>
+            `;
+            
+            const modal = document.createElement('div');
+            modal.className = 'modal';
+            modal.innerHTML = `
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3>Edit Book</h3>
+                        <button class="modal-close">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        ${modalContent}
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            
+            setTimeout(() => {
+                modal.classList.add('show');
+            }, 100);
+            
+            // Close modal on X click
+            modal.querySelector('.modal-close').addEventListener('click', () => {
+                closeModal();
+            });
+            
+            // Close modal on outside click
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    closeModal();
+                }
+            });
+            
+            // Handle form submission
+            modal.querySelector('#editBookForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                updateBook(bookId);
+            });
+        }
+        
+        function updateBook(bookId) {
+            const books = JSON.parse(localStorage.getItem('books')) || [];
+            const bookIndex = books.findIndex(b => b.id === parseInt(bookId));
+            
+            if (bookIndex === -1) {
+                alert('Book not found');
+                return;
+            }
+            
+            books[bookIndex] = {
+                ...books[bookIndex],
+                title: document.getElementById('editBookTitle').value,
+                author: document.getElementById('editBookAuthor').value,
+                category: document.getElementById('editBookCategory').value,
+                description: document.getElementById('editBookDescription').value,
+                pages: parseInt(document.getElementById('editBookPages').value) || books[bookIndex].pages,
+                year: parseInt(document.getElementById('editBookYear').value) || books[bookIndex].year,
+                rating: parseFloat(document.getElementById('editBookRating').value) || books[bookIndex].rating,
+                copies: parseInt(document.getElementById('editBookCopies').value) || books[bookIndex].copies,
+                available: document.getElementById('editBookAvailable').value === 'true',
+                cover: document.getElementById('editBookCover').value || books[bookIndex].cover
+            };
+            
+            localStorage.setItem('books', JSON.stringify(books));
+            
+            alert('Book updated successfully!');
+            closeModal();
+            loadAdminBooks();
+        }
+        
+        function deleteBook(bookId) {
+            if (!confirm('Are you sure you want to delete this book? This action cannot be undone.')) {
+                return;
+            }
+            
+            const books = JSON.parse(localStorage.getItem('books')) || [];
+            const bookIndex = books.findIndex(b => b.id === parseInt(bookId));
+            
+            if (bookIndex === -1) {
+                alert('Book not found');
+                return;
+            }
+            
+            // Check if book is currently borrowed
+            const borrowings = JSON.parse(localStorage.getItem('borrowings')) || [];
+            const activeBorrowings = borrowings.filter(b => b.bookId === parseInt(bookId) && b.status === 'active');
+            
+            if (activeBorrowings.length > 0) {
+                alert('Cannot delete book that is currently borrowed');
+                return;
+            }
+            
+            // Remove book from collection
+            books.splice(bookIndex, 1);
+            localStorage.setItem('books', JSON.stringify(books));
+            
+            alert('Book deleted successfully!');
+            loadAdminBooks();
+        }
+        
+        function searchBooks() {
+            const query = document.getElementById('adminSearch').value.toLowerCase();
+            const books = JSON.parse(localStorage.getItem('books')) || [];
+            
+            if (!query.trim()) {
+                loadAdminBooks();
+                return;
+            }
+            
+            const filteredBooks = books.filter(book => 
+                book.title.toLowerCase().includes(query) ||
+                book.author.toLowerCase().includes(query) ||
+                book.category.toLowerCase().includes(query)
+            );
+            
+            displayFilteredBooks(filteredBooks);
+        }
+        
+        function filterBooks() {
+            const category = document.getElementById('categoryFilter').value;
+            const availability = document.getElementById('availabilityFilter').value;
+            const books = JSON.parse(localStorage.getItem('books')) || [];
+            
+            let filteredBooks = books;
+            
+            // Filter by category
+            if (category !== 'all') {
+                filteredBooks = filteredBooks.filter(book => book.category === category);
+            }
+            
+            // Filter by availability
+            if (availability !== 'all') {
+                if (availability === 'available') {
+                    filteredBooks = filteredBooks.filter(book => book.available);
+                } else if (availability === 'borrowed') {
+                    filteredBooks = filteredBooks.filter(book => !book.available);
+                } else if (availability === 'unavailable') {
+                    filteredBooks = filteredBooks.filter(book => book.copies === 0);
+                }
+            }
+            
+            displayFilteredBooks(filteredBooks);
+        }
+        
+        function displayFilteredBooks(books) {
+            const booksTable = document.getElementById('adminBooksTable');
+            const noBooksMessage = document.getElementById('noBooksMessage');
+            
+            if (books.length === 0) {
+                booksTable.innerHTML = '';
+                noBooksMessage.style.display = 'block';
+                return;
+            }
+            
+            noBooksMessage.style.display = 'none';
+            booksTable.innerHTML = '';
+            
+            books.forEach(book => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>
+                        <img src="${book.cover}" alt="${book.title}" style="width: 50px; height: 70px; object-fit: cover; border-radius: 4px;">
+                    </td>
+                    <td><strong>${book.title}</strong></td>
+                    <td>${book.author}</td>
+                    <td>${book.category}</td>
+                    <td><span class="status-badge ${book.available ? 'status-active' : 'status-overdue'}">
+                        ${book.available ? 'Available' : 'Unavailable'}
+                    </span></td>
+                    <td>${book.copies}</td>
+                    <td>
+                        <div class="table-actions">
+                            <button class="btn btn-success btn-small edit-book-btn" data-id="${book.id}">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn btn-danger btn-small delete-book-btn" data-id="${book.id}">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                            <a href="book-details.html?id=${book.id}" class="btn btn-outline btn-small">
+                                <i class="fas fa-eye"></i>
+                            </a>
+                        </div>
+                    </td>
+                `;
+                booksTable.appendChild(row);
+            });
+            
+            // Re-add event listeners
+            document.querySelectorAll('.edit-book-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    editBook(this.dataset.id);
+                });
+            });
+            
+            document.querySelectorAll('.delete-book-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    deleteBook(this.dataset.id);
+                });
+            });
+        }
+        
+        function closeModal() {
+            const modal = document.querySelector('.modal');
+            if (modal) {
+                modal.classList.remove('show');
+                setTimeout(() => {
+                    document.body.removeChild(modal);
+                }, 300);
+            }
+        }
+    </script>
+</body>
+</html>

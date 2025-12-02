@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Library - Book Details</title>
+    <link rel="stylesheet" href="styles/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <div class="logo-icon">
+                        <i class="fas fa-book"></i>
+                    </div>
+                    <div class="logo-text">
+                        <h1>Digital Library</h1>
+                        <p>Your Window to Knowledge</p>
+                    </div>
+                </div>
+                <nav>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="catalog.html">Catalog</a></li>
+                        <li><a href="borrowings.html">My Borrowings</a></li>
+                        <li><a href="about.html">About</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </nav>
+                <div class="user-actions">
+                    <!-- Will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Book Details -->
+    <main class="book-details">
+        <div class="container">
+            <div class="book-details-content" id="bookDetails">
+                <!-- Will be populated by JavaScript -->
+            </div>
+            
+            <!-- Related Books -->
+            <section class="mt-5">
+                <h2>Related Books</h2>
+                <div class="books-grid mt-3" id="relatedBooks">
+                    <!-- Will be populated by JavaScript -->
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Digital Library</h3>
+                    <p>We are an electronic platform aiming to provide books and references for Arab readers worldwide.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="catalog.html">Catalog</a></li>
+                        <li><a href="about.html">About</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                        <li><a href="login.html">Login</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Contact Us</h3>
+                    <div class="footer-contact">
+                        <p><i class="fas fa-envelope"></i> info@elibrary.com</p>
+                        <p><i class="fas fa-phone"></i> +1 234 567 890</p>
+                        <p><i class="fas fa-map-marker-alt"></i> New York, USA</p>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>All rights reserved &copy; Digital Library 2023</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="js/main.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/books.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get book ID from URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const bookId = urlParams.get('id');
+            
+            if (bookId) {
+                loadBookDetails(bookId);
+                loadRelatedBooks(bookId);
+            } else {
+                document.getElementById('bookDetails').innerHTML = '<p>Book not found</p>';
+            }
+            
+            // Initialize header
+            updateHeader();
+        });
+        
+        function updateHeader() {
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            const userActions = document.querySelector('.user-actions');
+            if (currentUser) {
+                userActions.innerHTML = `
+                    <div class="user-profile">
+                        <span>Welcome, ${currentUser.name}</span>
+                        <a href="#" class="btn btn-outline" id="logoutBtn">Logout</a>
+                    </div>
+                `;
+                
+                document.getElementById('logoutBtn').addEventListener('click', function() {
+                    localStorage.removeItem('currentUser');
+                    window.location.href = 'index.html';
+                });
+            } else {
+                userActions.innerHTML = `
+                    <a href="login.html" class="btn btn-outline">Login</a>
+                    <a href="register.html" class="btn btn-primary">Register</a>
+                `;
+            }
+        }
+        
+        function loadBookDetails(bookId) {
+            const books = JSON.parse(localStorage.getItem('books')) || [];
+            const book = books.find(b => b.id === parseInt(bookId));
+            
+            if (!book) {
+                document.getElementById('bookDetails').innerHTML = '<p>Book not found</p>';
+                return;
+            }
+            
+            const bookDetails = document.getElementById('bookDetails');
+            bookDetails.innerHTML = `
+                <div class="book-cover-large">
+                    <img src="${book.cover}" alt="${book.title}">
+                </div>
+                <div class="book-info-details">
+                    <h1>${book.title}</h1>
+                    <p class="book-author-large">${book.author}</p>
+                    
+                    <div class="book-meta">
+                        <span><i class="fas fa-book"></i> ${book.pages} pages</span>
+                        <span><i class="fas fa-calendar"></i> ${book.year}</span>
+                        <span><i class="fas fa-tag"></i> ${book.category}</span>
+                        <span><i class="fas fa-star"></i> ${book.rating}/5</span>
+                    </div>
+                    
+                    <div class="book-status">
+                        <span class="status-badge ${book.available ? 'status-active' : 'status-overdue'}">
+                            ${book.available ? 'Available' : 'Unavailable'}
+                        </span>
+                        <span style="margin-left: 10px; color: var(--gray-dark);">
+                            ${book.copies} copies available
+                        </span>
+                    </div>
+                    
+                    <div class="book-description">
+                        <h3>About the Book</h3>
+                        <p>${book.description}</p>
+                        
+                        <h3 class="mt-3">About the Author</h3>
+                        <p>${book.author} is a renowned author in the field of ${book.category}. Their works have inspired millions of readers worldwide.</p>
+                    </div>
+                    
+                    <div class="book-actions-large">
+                        <button class="btn btn-accent btn-large" id="borrowBtn" 
+                                ${!book.available ? 'disabled' : ''}>
+                            ${book.available ? 'Borrow Now' : 'Not Available'}
+                        </button>
+                        <button class="btn btn-outline btn-large" id="addToFavorites">
+                            <i class="far fa-bookmark"></i> Add to Favorites
+                        </button>
+                        <a href="catalog.html" class="btn btn-secondary btn-large">Back to Catalog</a>
+                    </div>
+                </div>
+            `;
+            
+            // Add event listeners
+            document.getElementById('borrowBtn').addEventListener('click', function() {
+                borrowBook(book.id);
+            });
+            
+            document.getElementById('addToFavorites').addEventListener('click', function() {
+                addToFavorites(book.id);
+            });
+        }
+        
+        function loadRelatedBooks(currentBookId) {
+            const books = JSON.parse(localStorage.getItem('books')) || [];
+            const currentBook = books.find(b => b.id === parseInt(currentBookId));
+            
+            if (!currentBook) return;
+            
+            // Get books from same category (excluding current book)
+            const relatedBooks = books.filter(b => 
+                b.category === currentBook.category && 
+                b.id !== parseInt(currentBookId)
+            ).slice(0, 4); // Get first 4
+            
+            const relatedBooksContainer = document.getElementById('relatedBooks');
+            relatedBooksContainer.innerHTML = '';
+            
+            if (relatedBooks.length === 0) {
+                relatedBooksContainer.innerHTML = '<p>No related books found</p>';
+                return;
+            }
+            
+            relatedBooks.forEach(book => {
+                const bookCard = document.createElement('div');
+                bookCard.className = 'book-card';
+                bookCard.innerHTML = `
+                    <div class="book-cover">
+                        <img src="${book.cover}" alt="${book.title}">
+                    </div>
+                    <div class="book-info">
+                        <h3 class="book-title">${book.title}</h3>
+                        <p class="book-author">${book.author}</p>
+                        <span class="book-category">${book.category}</span>
+                        <div class="book-actions">
+                            <a href="book-details.html?id=${book.id}" class="btn btn-primary btn-small">View Details</a>
+                        </div>
+                    </div>
+                `;
+                relatedBooksContainer.appendChild(bookCard);
+            });
+        }
+        
+        function borrowBook(bookId) {
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            if (!currentUser) {
+                alert('Please login to borrow books');
+                window.location.href = 'login.html';
+                return;
+            }
+            
+            const books = JSON.parse(localStorage.getItem('books')) || [];
+            const book = books.find(b => b.id === parseInt(bookId));
+            
+            if (!book) {
+                alert('Book not found');
+                return;
+            }
+            
+            if (!book.available) {
+                alert('This book is not available');
+                return;
+            }
+            
+            // Check if user already borrowed this book
+            let borrowings = JSON.parse(localStorage.getItem('borrowings')) || [];
+            const existingBorrowing = borrowings.find(b => 
+                b.userId === currentUser.id && 
+                b.bookId === bookId && 
+                b.status === 'active'
+            );
+            
+            if (existingBorrowing) {
+                alert('You have already borrowed this book');
+                return;
+            }
+            
+            // Create new borrowing
+            const newBorrowing = {
+                id: borrowings.length + 1,
+                userId: currentUser.id,
+                bookId: book.id,
+                borrowDate: new Date().toISOString().split('T')[0],
+                dueDate: getDueDate(14),
+                returnDate: null,
+                status: 'active'
+            };
+            
+            // Update book copies
+            book.copies -= 1;
+            if (book.copies <= 0) {
+                book.available = false;
+            }
+            
+            // Save data
+            borrowings.push(newBorrowing);
+            localStorage.setItem('borrowings', JSON.stringify(borrowings));
+            localStorage.setItem('books', JSON.stringify(books));
+            
+            alert(`Successfully borrowed "${book.title}"`);
+            
+            // Update UI
+            const borrowBtn = document.getElementById('borrowBtn');
+            borrowBtn.disabled = true;
+            borrowBtn.textContent = 'Borrowed';
+            borrowBtn.classList.remove('btn-accent');
+            borrowBtn.classList.add('btn-secondary');
+            
+            // Update status badge
+            const statusBadge = document.querySelector('.book-status .status-badge');
+            if (statusBadge) {
+                statusBadge.textContent = 'Unavailable';
+                statusBadge.classList.remove('status-active');
+                statusBadge.classList.add('status-overdue');
+            }
+        }
+        
+        function addToFavorites(bookId) {
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            if (!currentUser) {
+                alert('Please login to add favorites');
+                window.location.href = 'login.html';
+                return;
+            }
+            
+            let favorites = JSON.parse(localStorage.getItem('favorites')) || {};
+            if (!favorites[currentUser.id]) {
+                favorites[currentUser.id] = [];
+            }
+            
+            if (!favorites[currentUser.id].includes(parseInt(bookId))) {
+                favorites[currentUser.id].push(parseInt(bookId));
+                localStorage.setItem('favorites', JSON.stringify(favorites));
+                alert('Added to favorites!');
+            } else {
+                alert('Already in favorites');
+            }
+        }
+        
+        function getDueDate(days) {
+            const date = new Date();
+            date.setDate(date.getDate() + days);
+            return date.toISOString().split('T')[0];
+        }
+    </script>
+</body>
+</html>

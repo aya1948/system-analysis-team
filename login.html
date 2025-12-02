@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Library - Login</title>
+    <link rel="stylesheet" href="styles/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <div class="logo-icon">
+                        <i class="fas fa-book"></i>
+                    </div>
+                    <div class="logo-text">
+                        <h1>Digital Library</h1>
+                        <p>Your Window to Knowledge</p>
+                    </div>
+                </div>
+                <nav>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="catalog.html">Catalog</a></li>
+                        <li><a href="about.html">About</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </nav>
+                <div class="user-actions">
+                    <a href="register.html" class="btn btn-primary">Register</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Login Form -->
+    <main class="container py-5">
+        <div class="form-container">
+            <h2 class="text-center">Login</h2>
+            <p class="text-center mb-4">Enter your credentials to access your account</p>
+            
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" class="form-control" placeholder="Enter your email" required>
+                    <small class="form-text text-muted">Use: john@example.com (admin) or jane@example.com (user)</small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" class="form-control" placeholder="Enter your password" required>
+                    <small class="form-text text-muted">Default password: password123</small>
+                </div>
+                
+                <div class="form-group">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <input type="checkbox" id="remember">
+                            <label for="remember">Remember me</label>
+                        </div>
+                        <a href="#" id="forgotPassword">Forgot Password?</a>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary btn-large" style="width: 100%;">Login</button>
+                </div>
+                
+                <div class="form-text">
+                    <p>Don't have an account? <a href="register.html">Create new account</a></p>
+                </div>
+                
+                <div class="text-center mt-4">
+                    <p>Demo Accounts:</p>
+                    <div class="demo-accounts mt-2">
+                        <div class="demo-account" onclick="fillCredentials('john@example.com', 'password123')">
+                            <strong>Admin:</strong> john@example.com
+                        </div>
+                        <div class="demo-account" onclick="fillCredentials('jane@example.com', 'password123')">
+                            <strong>User:</strong> jane@example.com
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Digital Library</h3>
+                    <p>We are an electronic platform aiming to provide books and references for Arab readers worldwide.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="catalog.html">Catalog</a></li>
+                        <li><a href="about.html">About</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                        <li><a href="login.html">Login</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Contact Us</h3>
+                    <div class="footer-contact">
+                        <p><i class="fas fa-envelope"></i> info@elibrary.com</p>
+                        <p><i class="fas fa-phone"></i> +1 234 567 890</p>
+                        <p><i class="fas fa-map-marker-alt"></i> New York, USA</p>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>All rights reserved &copy; Digital Library 2023</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if user is already logged in
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            if (currentUser) {
+                // Redirect based on role
+                if (currentUser.role === 'admin') {
+                    window.location.href = 'admin-dashboard.html';
+                } else {
+                    window.location.href = 'index.html';
+                }
+            }
+            
+            // Login form submission
+            document.getElementById('loginForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                login();
+            });
+            
+            // Forgot password
+            document.getElementById('forgotPassword').addEventListener('click', function(e) {
+                e.preventDefault();
+                forgotPassword();
+            });
+            
+            // Style demo accounts
+            const style = document.createElement('style');
+            style.textContent = `
+                .demo-accounts {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 10px;
+                    margin-top: 10px;
+                }
+                .demo-account {
+                    padding: 10px;
+                    background-color: var(--gray-light);
+                    border-radius: var(--border-radius);
+                    cursor: pointer;
+                    transition: var(--transition);
+                }
+                .demo-account:hover {
+                    background-color: var(--primary-color);
+                    color: white;
+                }
+            `;
+            document.head.appendChild(style);
+        });
+        
+        function fillCredentials(email, password) {
+            document.getElementById('email').value = email;
+            document.getElementById('password').value = password;
+        }
+        
+        function login() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            // Get users from localStorage
+            let users = JSON.parse(localStorage.getItem('users'));
+            
+            // If no users exist, initialize with default users
+            if (!users || users.length === 0) {
+                users = [
+                    {
+                        id: 1,
+                        name: "John Doe",
+                        email: "john@example.com",
+                        password: "password123",
+                        role: "admin"
+                    },
+                    {
+                        id: 2,
+                        name: "Jane Smith",
+                        email: "jane@example.com",
+                        password: "password123",
+                        role: "user"
+                    }
+                ];
+                localStorage.setItem('users', JSON.stringify(users));
+            }
+            
+            // Find user
+            const user = users.find(u => u.email === email && u.password === password);
+            
+            if (user) {
+                // Remove password from stored user object
+                const { password, ...userWithoutPassword } = user;
+                
+                // Store current user in localStorage
+                localStorage.setItem('currentUser', JSON.stringify(userWithoutPassword));
+                
+                // Show success message
+                alert('Login successful!');
+                
+                // Redirect based on role
+                setTimeout(() => {
+                    if (user.role === 'admin') {
+                        window.location.href = 'admin-dashboard.html';
+                    } else {
+                        window.location.href = 'index.html';
+                    }
+                }, 500);
+            } else {
+                alert('Invalid email or password. Please try again.');
+            }
+        }
+        
+        function forgotPassword() {
+            const email = prompt('Please enter your email address to reset your password:');
+            if (email) {
+                // In a real application, you would send an email here
+                // For demo purposes, we'll just show an alert
+                alert(`If an account exists with email ${email}, password reset instructions have been sent.`);
+                
+                // For demo, show the default password
+                const users = JSON.parse(localStorage.getItem('users')) || [];
+                const user = users.find(u => u.email === email);
+                if (user) {
+                    alert(`Demo password for ${email}: password123`);
+                }
+            }
+        }
+    </script>
+</body>
+</html>

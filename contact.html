@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Library - Contact Us</title>
+    <link rel="stylesheet" href="styles/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <div class="logo-icon">
+                        <i class="fas fa-book"></i>
+                    </div>
+                    <div class="logo-text">
+                        <h1>Digital Library</h1>
+                        <p>Your Window to Knowledge</p>
+                    </div>
+                </div>
+                <nav>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="catalog.html">Catalog</a></li>
+                        <li><a href="borrowings.html">My Borrowings</a></li>
+                        <li><a href="about.html">About</a></li>
+                        <li><a href="contact.html" class="active">Contact</a></li>
+                    </ul>
+                </nav>
+                <div class="user-actions">
+                    <!-- Will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Contact Section -->
+    <section class="py-5">
+        <div class="container">
+            <h1 class="text-center mb-5">Contact Us</h1>
+            
+            <div class="contact-container">
+                <!-- Contact Form -->
+                <div class="contact-form">
+                    <div class="form-container">
+                        <h3>Send us a Message</h3>
+                        <p>We're here to help. Fill out the form and we'll get back to you as soon as possible.</p>
+                        
+                        <form id="contactForm">
+                            <div class="form-group">
+                                <label for="name">Full Name</label>
+                                <input type="text" id="name" class="form-control" placeholder="Enter your full name" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="email">Email Address</label>
+                                <input type="email" id="email" class="form-control" placeholder="Enter your email" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="subject">Subject</label>
+                                <select id="subject" class="form-control">
+                                    <option value="">Select message subject</option>
+                                    <option value="general">General Inquiry</option>
+                                    <option value="technical">Technical Problem</option>
+                                    <option value="book-suggestion">Book Suggestion</option>
+                                    <option value="complaint">Complaint</option>
+                                    <option value="partnership">Partnership</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="message">Message</label>
+                                <textarea id="message" class="form-control" rows="5" placeholder="Write your message here..." required></textarea>
+                            </div>
+                            
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary btn-large" style="width: 100%;">Send Message</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                
+                <!-- Contact Info -->
+                <div class="contact-info">
+                    <h3>Contact Information</h3>
+                    <p>You can contact us through the following channels:</p>
+                    
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <div>
+                            <h4>Address</h4>
+                            <p>1234 Library Street<br>New York, NY 10001, USA</p>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-phone"></i>
+                        </div>
+                        <div>
+                            <h4>Phone</h4>
+                            <p>+1 (234) 567-8900</p>
+                            <p>Hotline: 1-800-LIBRARY</p>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <div>
+                            <h4>Email</h4>
+                            <p>info@elibrary.com</p>
+                            <p>support@elibrary.com</p>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div>
+                            <h4>Working Hours</h4>
+                            <p>Monday - Friday: 8:00 AM - 6:00 PM</p>
+                            <p>Saturday - Sunday: 10:00 AM - 4:00 PM</p>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-4">
+                        <h4>Follow us on Social Media</h4>
+                        <div class="book-actions-large">
+                            <a href="#" class="btn btn-outline"><i class="fab fa-twitter"></i></a>
+                            <a href="#" class="btn btn-outline"><i class="fab fa-facebook"></i></a>
+                            <a href="#" class="btn btn-outline"><i class="fab fa-instagram"></i></a>
+                            <a href="#" class="btn btn-outline"><i class="fab fa-linkedin"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- FAQ Section -->
+            <div class="faq-section">
+                <h2 class="text-center mb-4">Frequently Asked Questions</h2>
+                
+                <div class="faq-item active">
+                    <div class="faq-question">
+                        <h4>How can I borrow a book?</h4>
+                        <span class="faq-toggle">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>To borrow a book, you first need to create an account in the Digital Library. Then, you can browse the catalog and select the book you want to borrow and click on the "Borrow" button. The borrowing period is 14 days and can be renewed once if there is no waiting list for the book.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h4>What is the borrowing period?</h4>
+                        <span class="faq-toggle">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>The basic borrowing period is 14 days. You can renew the borrowing for an additional 14 days if there is no waiting list for the book. You can check due dates in the "My Borrowings" page.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h4>How can I renew a book borrowing?</h4>
+                        <span class="faq-toggle">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>You can renew borrowing from the "My Borrowings" page by clicking on the "Renew" button next to the book you want to renew. You can only renew once per book, provided there is no waiting list for the book.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h4>Can I download books for offline reading?</h4>
+                        <span class="faq-toggle">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Yes, you can download most available books for offline reading. After borrowing, you will find a "Download" option on the book page. Some books may be restricted to platform-only reading due to publisher restrictions.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h4>What happens if I'm late in returning a book?</h4>
+                        <span class="faq-toggle">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>In case of late book return, your account will be temporarily suspended from making new borrowings until the book is returned. We recommend adhering to return dates to avoid any account suspension.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h4>Can I suggest a book to be added to the library?</h4>
+                        <span class="faq-toggle">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Yes, we welcome book suggestions. You can use the contact form and select "Book Suggestion" as the message subject. We will study the suggestion and add it to the library if it is available for electronic publishing.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Digital Library</h3>
+                    <p>We are an electronic platform aiming to provide books and references for Arab readers worldwide.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="catalog.html">Catalog</a></li>
+                        <li><a href="borrowings.html">My Borrowings</a></li>
+                        <li><a href="about.html">About</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Contact Us</h3>
+                    <div class="footer-contact">
+                        <p><i class="fas fa-envelope"></i> info@elibrary.com</p>
+                        <p><i class="fas fa-phone"></i> +1 234 567 890</p>
+                        <p><i class="fas fa-map-marker-alt"></i> New York, USA</p>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>All rights reserved &copy; Digital Library 2023</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="js/main.js"></script>
+    <script src="js/auth.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize header
+            updateHeader();
+            
+            // Setup FAQ functionality
+            setupFAQ();
+            
+            // Contact form submission
+            document.getElementById('contactForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                sendContactMessage();
+            });
+        });
+        
+        function updateHeader() {
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            const userActions = document.querySelector('.user-actions');
+            if (currentUser) {
+                userActions.innerHTML = `
+                    <div class="user-profile">
+                        <span>Welcome, ${currentUser.name}</span>
+                        <a href="#" class="btn btn-outline" id="logoutBtn">Logout</a>
+                    </div>
+                `;
+                
+                document.getElementById('logoutBtn').addEventListener('click', function() {
+                    localStorage.removeItem('currentUser');
+                    window.location.href = 'index.html';
+                });
+            } else {
+                userActions.innerHTML = `
+                    <a href="login.html" class="btn btn-outline">Login</a>
+                    <a href="register.html" class="btn btn-primary">Register</a>
+                `;
+            }
+        }
+        
+        function setupFAQ() {
+            const faqItems = document.querySelectorAll('.faq-item');
+            
+            faqItems.forEach(item => {
+                const question = item.querySelector('.faq-question');
+                const toggle = item.querySelector('.faq-toggle');
+                
+                question.addEventListener('click', function() {
+                    // Close all other items
+                    faqItems.forEach(otherItem => {
+                        if (otherItem !== item) {
+                            otherItem.classList.remove('active');
+                        }
+                    });
+                    
+                    // Toggle current item
+                    item.classList.toggle('active');
+                });
+                
+                toggle.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    item.classList.toggle('active');
+                });
+            });
+        }
+        
+        function sendContactMessage() {
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const subject = document.getElementById('subject').value;
+            const message = document.getElementById('message').value;
+            
+            // In a real application, you would send this to a server
+            // For demo purposes, we'll just show an alert and save to localStorage
+            
+            // Save contact message (for demo)
+            let contactMessages = JSON.parse(localStorage.getItem('contactMessages')) || [];
+            const newMessage = {
+                id: contactMessages.length + 1,
+                name: name,
+                email: email,
+                subject: subject || 'General Inquiry',
+                message: message,
+                date: new Date().toISOString(),
+                status: 'unread'
+            };
+            
+            contactMessages.push(newMessage);
+            localStorage.setItem('contactMessages', JSON.stringify(contactMessages));
+            
+            // Show success message
+            alert('Thank you for your message! We will get back to you soon.');
+            
+            // Reset form
+            document.getElementById('contactForm').reset();
+            
+            // If user is logged in, pre-fill name and email
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            if (currentUser) {
+                document.getElementById('name').value = currentUser.name;
+                document.getElementById('email').value = currentUser.email;
+            }
+        }
+    </script>
+</body>
+</html>

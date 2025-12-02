@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Library - Admin Dashboard</title>
+    <link rel="stylesheet" href="styles/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <div class="logo-icon">
+                        <i class="fas fa-book"></i>
+                    </div>
+                    <div class="logo-text">
+                        <h1>Digital Library</h1>
+                        <p>Admin Dashboard</p>
+                    </div>
+                </div>
+                <nav>
+                    <ul>
+                        <li><a href="index.html">Main Site</a></li>
+                        <li><a href="admin-dashboard.html" class="active">Dashboard</a></li>
+                        <li><a href="admin-books.html">Manage Books</a></li>
+                    </ul>
+                </nav>
+                <div class="user-actions">
+                    <!-- Will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Admin Content -->
+    <div class="admin-container">
+        <!-- Sidebar -->
+        <aside class="admin-sidebar">
+            <nav>
+                <ul class="sidebar-nav">
+                    <li><a href="admin-dashboard.html" class="active"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                    <li><a href="admin-books.html"><i class="fas fa-book"></i> Manage Books</a></li>
+                    <li><a href="#" id="manageUsersBtn"><i class="fas fa-users"></i> Manage Users</a></li>
+                    <li><a href="#" id="manageBorrowingsBtn"><i class="fas fa-exchange-alt"></i> Manage Borrowings</a></li>
+                    <li><a href="#" id="reportsBtn"><i class="fas fa-chart-bar"></i> Reports & Statistics</a></li>
+                    <li><a href="#" id="settingsBtn"><i class="fas fa-cog"></i> Settings</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="admin-content">
+            <h1>Admin Dashboard</h1>
+            <p class="mb-4">Welcome to the Digital Library Management System admin panel. Here you can manage all aspects of the system.</p>
+            
+            <!-- Stats Cards -->
+            <div class="dashboard-cards">
+                <div class="dashboard-card">
+                    <div class="dashboard-card-icon">
+                        <i class="fas fa-book"></i>
+                    </div>
+                    <h3 id="totalBooks">0</h3>
+                    <p>Total Books</p>
+                </div>
+                <div class="dashboard-card">
+                    <div class="dashboard-card-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3 id="totalUsers">0</h3>
+                    <p>Registered Users</p>
+                </div>
+                <div class="dashboard-card">
+                    <div class="dashboard-card-icon">
+                        <i class="fas fa-exchange-alt"></i>
+                    </div>
+                    <h3 id="activeBorrowings">0</h3>
+                    <p>Active Borrowings</p>
+                </div>
+                <div class="dashboard-card">
+                    <div class="dashboard-card-icon">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <h3 id="overdueBorrowings">0</h3>
+                    <p>Overdue Borrowings</p>
+                </div>
+            </div>
+            
+            <!-- Quick Actions -->
+            <div class="mt-5">
+                <h2>Quick Actions</h2>
+                <div class="book-actions-large mt-3">
+                    <a href="admin-books.html" class="btn btn-primary btn-large"><i class="fas fa-plus"></i> Add New Book</a>
+                    <button class="btn btn-secondary btn-large" id="addUserBtn"><i class="fas fa-user-plus"></i> Add New User</button>
+                    <button class="btn btn-accent btn-large" id="exportReportsBtn"><i class="fas fa-file-export"></i> Export Reports</button>
+                </div>
+            </div>
+            
+            <!-- Recent Activity -->
+            <div class="mt-5">
+                <h2>Recent Activity</h2>
+                <div class="table-responsive mt-3">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Activity</th>
+                                <th>User</th>
+                                <th>Details</th>
+                            </tr>
+                        </thead>
+                        <tbody id="recentActivity">
+                            <!-- Will be populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Digital Library</h3>
+                    <p>We are an electronic platform aiming to provide books and references for Arab readers worldwide.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="index.html">Main Site</a></li>
+                        <li><a href="admin-dashboard.html">Dashboard</a></li>
+                        <li><a href="admin-books.html">Manage Books</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Contact Us</h3>
+                    <div class="footer-contact">
+                        <p><i class="fas fa-envelope"></i> admin@elibrary.com</p>
+                        <p><i class="fas fa-phone"></i> +1 234 567 890</p>
+                        <p><i class="fas fa-map-marker-alt"></i> New York, USA</p>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>All rights reserved &copy; Digital Library 2023 - Admin Panel</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="js/main.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/admin.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if user is admin
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            if (!currentUser || currentUser.role !== 'admin') {
+                alert('Admin access required');
+                window.location.href = 'index.html';
+                return;
+            }
+            
+            // Initialize header
+            updateHeader();
+            
+            // Load dashboard data
+            loadDashboardData();
+            
+            // Setup event listeners
+            setupEventListeners();
+        });
+        
+        function updateHeader() {
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            const userActions = document.querySelector('.user-actions');
+            if (currentUser) {
+                userActions.innerHTML = `
+                    <div class="user-profile">
+                        <span>System Admin</span>
+                        <a href="#" class="btn btn-outline" id="logoutBtn">Logout</a>
+                    </div>
+                `;
+                
+                document.getElementById('logoutBtn').addEventListener('click', function() {
+                    localStorage.removeItem('currentUser');
+                    window.location.href = 'index.html';
+                });
+            }
+        }
+        
+        function loadDashboardData() {
+            // Load statistics
+            updateStatistics();
+            
+            // Load recent activity
+            loadRecentActivity();
+        }
+        
+        function updateStatistics() {
+            const books = JSON.parse(localStorage.getItem('books')) || [];
+            const users = JSON.parse(localStorage.getItem('users')) || [];
+            const borrowings = JSON.parse(localStorage.getItem('borrowings')) || [];
+            
+            // Calculate statistics
+            const totalBooks = books.length;
+            const totalUsers = users.filter(u => u.role === 'user').length;
+            const activeBorrowings = borrowings.filter(b => b.status === 'active').length;
+            const overdueBorrowings = borrowings.filter(b => {
+                if (b.status !== 'active') return false;
+                const dueDate = new Date(b.dueDate);
+                const today = new Date();
+                return dueDate < today;
+            }).length;
+            
+            // Update UI
+            document.getElementById('totalBooks').textContent = totalBooks;
+            document.getElementById('totalUsers').textContent = totalUsers;
+            document.getElementById('activeBorrowings').textContent = activeBorrowings;
+            document.getElementById('overdueBorrowings').textContent = overdueBorrowings;
+        }
+        
+        function loadRecentActivity() {
+            const borrowings = JSON.parse(localStorage.getItem('borrowings')) || [];
+            const books = JSON.parse(localStorage.getItem('books')) || [];
+            const users = JSON.parse(localStorage.getItem('users')) || [];
+            
+            // Get recent borrowings (last 5)
+            const recentBorrowings = [...borrowings]
+                .sort((a, b) => new Date(b.borrowDate) - new Date(a.borrowDate))
+                .slice(0, 5);
+            
+            const activityTable = document.getElementById('recentActivity');
+            activityTable.innerHTML = '';
+            
+            recentBorrowings.forEach(borrowing => {
+                const book = books.find(b => b.id === borrowing.bookId);
+                const user = users.find(u => u.id === borrowing.userId);
+                
+                if (book && user) {
+                    const activityType = borrowing.status === 'active' ? 'Borrowed' : 'Returned';
+                    const activityIcon = borrowing.status === 'active' ? 
+                        '<i class="fas fa-book-reader" style="color: var(--primary-color);"></i>' : 
+                        '<i class="fas fa-undo" style="color: var(--success-color);"></i>';
+                    
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${formatDate(borrowing.borrowDate)}</td>
+                        <td>${activityIcon} ${activityType}</td>
+                        <td>${user.name}</td>
+                        <td>${book.title}</td>
+                    `;
+                    activityTable.appendChild(row);
+                }
+            });
+            
+            // If no activity
+            if (recentBorrowings.length === 0) {
+                activityTable.innerHTML = `
+                    <tr>
+                        <td colspan="4" class="text-center">No recent activity</td>
+                    </tr>
+                `;
+            }
+        }
+        
+        function setupEventListeners() {
+            // Add User button
+            document.getElementById('addUserBtn').addEventListener('click', function() {
+                showAddUserModal();
+            });
+            
+            // Export Reports button
+            document.getElementById('exportReportsBtn').addEventListener('click', function() {
+                exportReports();
+            });
+            
+            // Sidebar buttons
+            document.getElementById('manageUsersBtn').addEventListener('click', function(e) {
+                e.preventDefault();
+                showManageUsersModal();
+            });
+            
+            document.getElementById('manageBorrowingsBtn').addEventListener('click', function(e) {
+                e.preventDefault();
+                showManageBorrowingsModal();
+            });
+            
+            document.getElementById('reportsBtn').addEventListener('click', function(e) {
+                e.preventDefault();
+                showReportsModal();
+            });
+            
+            document.getElementById('settingsBtn').addEventListener('click', function(e) {
+                e.preventDefault();
+                showSettingsModal();
+            });
+        }
+        
+        function showAddUserModal() {
+            const modalContent = `
+                <form id="addUserForm">
+                    <div class="form-group">
+                        <label for="userName">Full Name</label>
+                        <input type="text" id="userName" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="userEmail">Email Address</label>
+                        <input type="email" id="userEmail" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="userPassword">Password</label>
+                        <input type="password" id="userPassword" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="userRole">Role</label>
+                        <select id="userRole" class="form-control" required>
+                            <option value="user">Regular User</option>
+                            <option value="admin">Administrator</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary">Add User</button>
+                        <button type="button" class="btn btn-outline" onclick="closeModal()">Cancel</button>
+                    </div>
+                </form>
+            `;
+            
+            const modal = document.createElement('div');
+            modal.className = 'modal';
+            modal.innerHTML = `
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3>Add New User</h3>
+                        <button class="modal-close">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        ${modalContent}
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            
+            setTimeout(() => {
+                modal.classList.add('show');
+            }, 100);
+            
+            // Close modal on X click
+            modal.querySelector('.modal-close').addEventListener('click', () => {
+                modal.classList.remove('show');
+                setTimeout(() => {
+                    document.body.removeChild(modal);
+                }, 300);
+            });
+            
+            // Close modal on outside click
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.classList.remove('show');
+                    setTimeout(() => {
+                        document.body.removeChild(modal);
+                    }, 300);
+                }
+            });
+            
+            // Handle form submission
+            modal.querySelector('#addUserForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                addNewUser();
+                
+                modal.classList.remove('show');
+                setTimeout(() => {
+                    document.body.removeChild(modal);
+                }, 300);
+            });
+        }
+        
+        function addNewUser() {
+            const users = JSON.parse(localStorage.getItem('users')) || [];
+            
+            const newUser = {
+                id: users.length > 0 ? Math.max(...users.map(u => u.id)) + 1 : 1,
+                name: document.getElementById('userName').value,
+                email: document.getElementById('userEmail').value,
+                password: document.getElementById('userPassword').value,
+                role: document.getElementById('userRole').value
+            };
+            
+            // Check if email already exists
+            if (users.some(u => u.email === newUser.email)) {
+                alert('User with this email already exists');
+                return;
+            }
+            
+            users.push(newUser);
+            localStorage.setItem('users', JSON.stringify(users));
+            
+            alert('User added successfully');
+            updateStatistics();
+        }
+        
+        function exportReports() {
+            const books = JSON.parse(localStorage.getItem('books')) || [];
+            const users = JSON.parse(localStorage.getItem('users')) || [];
+            const borrowings = JSON.parse(localStorage.getItem('borrowings')) || [];
+            
+            // Create report data
+            const report = {
+                generated: new Date().toISOString(),
+                statistics: {
+                    totalBooks: books.length,
+                    totalUsers: users.filter(u => u.role === 'user').length,
+                    activeBorrowings: borrowings.filter(b => b.status === 'active').length,
+                    overdueBorrowings: borrowings.filter(b => {
+                        if (b.status !== 'active') return false;
+                        const dueDate = new Date(b.dueDate);
+                        const today = new Date();
+                        return dueDate < today;
+                    }).length
+                },
+                recentBorrowings: borrowings.slice(-10), // Last 10 borrowings
+                popularBooks: books.sort((a, b) => b.rating - a.rating).slice(0, 5) // Top 5 rated books
+            };
+            
+            // Convert to JSON string
+            const reportJSON = JSON.stringify(report, null, 2);
+            
+            // Create download link
+            const blob = new Blob([reportJSON], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `library-report-${new Date().toISOString().split('T')[0]}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            alert('Report exported successfully');
+        }
+        
+        function showManageUsersModal() {
+            alert('User management feature coming soon!');
+        }
+        
+        function showManageBorrowingsModal() {
+            alert('Borrowing management feature coming soon!');
+        }
+        
+        function showReportsModal() {
+            alert('Advanced reports feature coming soon!');
+        }
+        
+        function showSettingsModal() {
+            alert('System settings feature coming soon!');
+        }
+        
+        function closeModal() {
+            const modal = document.querySelector('.modal');
+            if (modal) {
+                modal.classList.remove('show');
+                setTimeout(() => {
+                    document.body.removeChild(modal);
+                }, 300);
+            }
+        }
+        
+        function formatDate(dateString) {
+            const options = { year: 'numeric', month: 'short', day: 'numeric' };
+            return new Date(dateString).toLocaleDateString('en-US', options);
+        }
+    </script>
+</body>
+</html>

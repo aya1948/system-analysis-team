@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Library - My Borrowings</title>
+    <link rel="stylesheet" href="styles/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <div class="logo-icon">
+                        <i class="fas fa-book"></i>
+                    </div>
+                    <div class="logo-text">
+                        <h1>Digital Library</h1>
+                        <p>Your Window to Knowledge</p>
+                    </div>
+                </div>
+                <nav>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="catalog.html">Catalog</a></li>
+                        <li><a href="borrowings.html" class="active">My Borrowings</a></li>
+                        <li><a href="about.html">About</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </nav>
+                <div class="user-actions">
+                    <!-- Will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container py-5">
+        <h1 class="mb-4">My Borrowings</h1>
+        
+        <!-- Tabs -->
+        <div class="categories mb-4" id="borrowingTabs">
+            <button class="category-btn active" data-status="active">Active Borrowings</button>
+            <button class="category-btn" data-status="returned">Returned Books</button>
+            <button class="category-btn" data-status="all">All History</button>
+        </div>
+        
+        <!-- Borrowings Table -->
+        <div class="table-responsive">
+            <table class="borrowings-table">
+                <thead>
+                    <tr>
+                        <th>Book</th>
+                        <th>Borrow Date</th>
+                        <th>Due Date</th>
+                        <th>Days Remaining</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="borrowingsTableBody">
+                    <!-- Will be populated by JavaScript -->
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Borrowing Stats -->
+        <div class="dashboard-cards mt-5">
+            <div class="dashboard-card">
+                <div class="dashboard-card-icon">
+                    <i class="fas fa-book-open"></i>
+                </div>
+                <h3 id="activeBorrowingsCount">0</h3>
+                <p>Active Borrowings</p>
+            </div>
+            <div class="dashboard-card">
+                <div class="dashboard-card-icon">
+                    <i class="fas fa-history"></i>
+                </div>
+                <h3 id="totalBorrowingsCount">0</h3>
+                <p>Total Borrowings</p>
+            </div>
+            <div class="dashboard-card">
+                <div class="dashboard-card-icon">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <h3 id="overdueBorrowingsCount">0</h3>
+                <p>Overdue Borrowings</p>
+            </div>
+            <div class="dashboard-card">
+                <div class="dashboard-card-icon">
+                    <i class="fas fa-star"></i>
+                </div>
+                <h3 id="favoritesCount">0</h3>
+                <p>Favorite Books</p>
+            </div>
+        </div>
+        
+        <!-- No Borrowings Message -->
+        <div id="noBorrowingsMessage" class="text-center mt-5" style="display: none;">
+            <i class="fas fa-book-open" style="font-size: 4rem; color: var(--gray); margin-bottom: 1rem;"></i>
+            <h3>No Borrowings Yet</h3>
+            <p>You haven't borrowed any books yet. Start exploring our catalog!</p>
+            <a href="catalog.html" class="btn btn-primary mt-3">Browse Books</a>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Digital Library</h3>
+                    <p>We are an electronic platform aiming to provide books and references for Arab readers worldwide.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="catalog.html">Catalog</a></li>
+                        <li><a href="borrowings.html">My Borrowings</a></li>
+                        <li><a href="about.html">About</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Contact Us</h3>
+                    <div class="footer-contact">
+                        <p><i class="fas fa-envelope"></i> info@elibrary.com</p>
+                        <p><i class="fas fa-phone"></i> +1 234 567 890</p>
+                        <p><i class="fas fa-map-marker-alt"></i> New York, USA</p>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>All rights reserved &copy; Digital Library 2023</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="js/main.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/books.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if user is logged in
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            if (!currentUser) {
+                alert('Please login to view your borrowings');
+                window.location.href = 'login.html';
+                return;
+            }
+            
+            // Initialize header
+            updateHeader();
+            
+            // Load borrowings
+            loadUserBorrowings('active');
+            updateStats();
+            
+            // Tab switching
+            document.querySelectorAll('#borrowingTabs .category-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    // Update active tab
+                    document.querySelectorAll('#borrowingTabs .category-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    const status = this.dataset.status;
+                    loadUserBorrowings(status);
+                });
+            });
+        });
+        
+        function updateHeader() {
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            const userActions = document.querySelector('.user-actions');
+            if (currentUser) {
+                userActions.innerHTML = `
+                    <div class="user-profile">
+                        <span>Welcome, ${currentUser.name}</span>
+                        <a href="#" class="btn btn-outline" id="logoutBtn">Logout</a>
+                    </div>
+                `;
+                
+                document.getElementById('logoutBtn').addEventListener('click', function() {
+                    localStorage.removeItem('currentUser');
+                    window.location.href = 'index.html';
+                });
+            }
+        }
+        
+        function loadUserBorrowings(statusFilter) {
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            if (!currentUser) return;
+            
+            const borrowings = JSON.parse(localStorage.getItem('borrowings')) || [];
+            const books = JSON.parse(localStorage.getItem('books')) || [];
+            
+            // Filter borrowings by user and status
+            let userBorrowings = borrowings.filter(b => b.userId === currentUser.id);
+            
+            if (statusFilter !== 'all') {
+                userBorrowings = userBorrowings.filter(b => 
+                    statusFilter === 'active' ? b.status === 'active' : b.status === 'returned'
+                );
+            }
+            
+            const tableBody = document.getElementById('borrowingsTableBody');
+            const noBorrowingsMessage = document.getElementById('noBorrowingsMessage');
+            
+            if (userBorrowings.length === 0) {
+                tableBody.innerHTML = '';
+                noBorrowingsMessage.style.display = 'block';
+                return;
+            }
+            
+            noBorrowingsMessage.style.display = 'none';
+            tableBody.innerHTML = '';
+            
+            userBorrowings.forEach(borrowing => {
+                const book = books.find(b => b.id === borrowing.bookId);
+                if (!book) return;
+                
+                const daysRemaining = calculateDaysRemaining(borrowing.dueDate);
+                const status = getBorrowingStatus(borrowing, daysRemaining);
+                const statusClass = getStatusClass(status);
+                
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <img src="${book.cover}" alt="${book.title}" style="width: 50px; height: 70px; object-fit: cover; border-radius: 4px;">
+                            <div>
+                                <strong>${book.title}</strong><br>
+                                <small>${book.author}</small>
+                            </div>
+                        </div>
+                    </td>
+                    <td>${formatDate(borrowing.borrowDate)}</td>
+                    <td>${formatDate(borrowing.dueDate)}</td>
+                    <td>${borrowing.status === 'active' ? 
+                        (daysRemaining > 0 ? `${daysRemaining} days` : `${Math.abs(daysRemaining)} days overdue`) : 
+                        '--'}</td>
+                    <td><span class="status-badge ${statusClass}">${status}</span></td>
+                    <td>
+                        <div class="table-actions">
+                            ${borrowing.status === 'active' ? 
+                                `<button class="btn btn-success btn-small renew-btn" data-id="${borrowing.id}">Renew</button>
+                                 <button class="btn btn-danger btn-small return-btn" data-id="${borrowing.id}">Return</button>` : 
+                                ''}
+                            <a href="book-details.html?id=${book.id}" class="btn btn-outline btn-small">View</a>
+                        </div>
+                    </td>
+                `;
+                
+                tableBody.appendChild(row);
+            });
+            
+            // Add event listeners for action buttons
+            document.querySelectorAll('.renew-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    renewBorrowing(this.dataset.id);
+                });
+            });
+            
+            document.querySelectorAll('.return-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    returnBorrowing(this.dataset.id);
+                });
+            });
+        }
+        
+        function updateStats() {
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            if (!currentUser) return;
+            
+            const borrowings = JSON.parse(localStorage.getItem('borrowings')) || [];
+            const favorites = JSON.parse(localStorage.getItem('favorites')) || {};
+            
+            // Calculate stats
+            const userBorrowings = borrowings.filter(b => b.userId === currentUser.id);
+            const activeBorrowings = userBorrowings.filter(b => b.status === 'active');
+            const overdueBorrowings = activeBorrowings.filter(b => {
+                const daysRemaining = calculateDaysRemaining(b.dueDate);
+                return daysRemaining < 0;
+            });
+            
+            const userFavorites = favorites[currentUser.id] || [];
+            
+            // Update UI
+            document.getElementById('activeBorrowingsCount').textContent = activeBorrowings.length;
+            document.getElementById('totalBorrowingsCount').textContent = userBorrowings.length;
+            document.getElementById('overdueBorrowingsCount').textContent = overdueBorrowings.length;
+            document.getElementById('favoritesCount').textContent = userFavorites.length;
+        }
+        
+        function renewBorrowing(borrowingId) {
+            const borrowings = JSON.parse(localStorage.getItem('borrowings')) || [];
+            const borrowing = borrowings.find(b => b.id === parseInt(borrowingId));
+            
+            if (!borrowing) {
+                alert('Borrowing record not found');
+                return;
+            }
+            
+            // Check if already renewed
+            if (borrowing.renewed) {
+                alert('Book can only be renewed once');
+                return;
+            }
+            
+            // Update due date (add 14 more days)
+            borrowing.dueDate = getDueDate(28); // Original 14 + additional 14
+            borrowing.renewed = true;
+            
+            // Save changes
+            localStorage.setItem('borrowings', JSON.stringify(borrowings));
+            
+            alert('Book renewed for 14 more days');
+            
+            // Refresh display
+            const activeTab = document.querySelector('#borrowingTabs .category-btn.active');
+            loadUserBorrowings(activeTab.dataset.status);
+            updateStats();
+        }
+        
+        function returnBorrowing(borrowingId) {
+            const borrowings = JSON.parse(localStorage.getItem('borrowings')) || [];
+            const borrowing = borrowings.find(b => b.id === parseInt(borrowingId));
+            
+            if (!borrowing) {
+                alert('Borrowing record not found');
+                return;
+            }
+            
+            // Update borrowing record
+            borrowing.returnDate = new Date().toISOString().split('T')[0];
+            borrowing.status = 'returned';
+            
+            // Update book availability
+            const books = JSON.parse(localStorage.getItem('books')) || [];
+            const book = books.find(b => b.id === borrowing.bookId);
+            
+            if (book) {
+                book.copies += 1;
+                if (book.copies > 0) {
+                    book.available = true;
+                }
+                localStorage.setItem('books', JSON.stringify(books));
+            }
+            
+            // Save changes
+            localStorage.setItem('borrowings', JSON.stringify(borrowings));
+            
+            alert('Book returned successfully');
+            
+            // Refresh display
+            const activeTab = document.querySelector('#borrowingTabs .category-btn.active');
+            loadUserBorrowings(activeTab.dataset.status);
+            updateStats();
+        }
+        
+        // Helper functions
+        function calculateDaysRemaining(dueDate) {
+            const today = new Date();
+            const due = new Date(dueDate);
+            const diffTime = due - today;
+            return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        }
+        
+        function getBorrowingStatus(borrowing, daysRemaining) {
+            if (borrowing.status === 'returned') return 'Returned';
+            if (daysRemaining < 0) return 'Overdue';
+            return 'Active';
+        }
+        
+        function getStatusClass(status) {
+            switch(status.toLowerCase()) {
+                case 'active': return 'status-active';
+                case 'overdue': return 'status-overdue';
+                case 'returned': return 'status-returned';
+                default: return '';
+            }
+        }
+        
+        function formatDate(dateString) {
+            const options = { year: 'numeric', month: 'short', day: 'numeric' };
+            return new Date(dateString).toLocaleDateString('en-US', options);
+        }
+        
+        function getDueDate(days) {
+            const date = new Date();
+            date.setDate(date.getDate() + days);
+            return date.toISOString().split('T')[0];
+        }
+    </script>
+</body>
+</html>

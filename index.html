@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نظام إدارة المكتبة | Library Management System</title>
+    <link rel="stylesheet" href="styles/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Header / Navigation -->
+    <header class="header">
+        <div class="container">
+            <nav class="navbar">
+                <a href="#home" class="logo">
+                    <img src="icons/logo.svg" alt="شعار المكتبة" class="logo-icon">
+                    <span>مكتبة المعرفة</span>
+                </a>
+                
+                <button class="menu-toggle" aria-label="فتح القائمة">
+                    <i class="fas fa-bars"></i>
+                </button>
+                
+                <ul class="nav-links">
+                    <li><a href="#home" class="nav-link"><i class="fas fa-home"></i> الرئيسية</a></li>
+                    <li><a href="#catalog" class="nav-link"><i class="fas fa-book"></i> الفهرس</a></li>
+                    <li><a href="#borrowings" class="nav-link"><i class="fas fa-hand-holding"></i> الاستعارات</a></li>
+                    <li><a href="#admin" class="nav-link"><i class="fas fa-user-shield"></i> لوحة التحكم</a></li>
+                    <li><a href="#about" class="nav-link"><i class="fas fa-info-circle"></i> حول المكتبة</a></li>
+                    <li><a href="#contact" class="nav-link"><i class="fas fa-envelope"></i> اتصل بنا</a></li>
+                </ul>
+                
+<div class="auth-section">
+    <div class="auth-buttons" id="guest-buttons">
+        <a href="#register" class="register-link">
+            <i class="fas fa-user-plus"></i> إنشاء حساب
+        </a>
+        <a href="#login" class="btn btn-outline" id="login-btn">
+            <i class="fas fa-sign-in-alt"></i> تسجيل الدخول
+        </a>
+    </div>
+    
+    <div class="user-profile-menu" id="user-profile-menu" style="display: none;">
+        <div class="user-dropdown">
+            <button class="user-toggle" id="user-toggle">
+                <span class="user-avatar">
+                    <i class="fas fa-user-circle"></i>
+                </span>
+                <span class="user-name" id="username-display">المستخدم</span>
+                <i class="fas fa-chevron-down"></i>
+            </button>
+            
+            <div class="dropdown-menu" id="user-dropdown-menu">
+                <a href="#profile" class="dropdown-item">
+                    <i class="fas fa-user"></i> الملف الشخصي
+                </a>
+                <a href="#borrowings" class="dropdown-item">
+                    <i class="fas fa-book"></i> استعاراتي
+                </a>
+                <a href="#favorites" class="dropdown-item">
+                    <i class="fas fa-heart"></i> المفضلة
+                </a>
+                <div class="dropdown-divider"></div>
+                <a href="#settings" class="dropdown-item">
+                    <i class="fas fa-cog"></i> الإعدادات
+                </a>
+                <button class="dropdown-item" id="logout-btn">
+                    <i class="fas fa-sign-out-alt"></i> تسجيل الخروج
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content Area (SPA Views) -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Home Page -->
+            <section id="home-page" class="page active">
+                <div class="hero">
+                    <h1 class="hero-title">مرحباً بكم في مكتبة المعرفة</h1>
+                    <p class="hero-subtitle">اكتشف عالماً من الكتب والمعرفة. استعرض مجموعتنا الواسعة واستعر الكتب بسهولة.</p>
+                    <div class="hero-buttons">
+                        <a href="#catalog" class="btn btn-primary">استعرض الكتب <i class="fas fa-arrow-left"></i></a>
+                        <a href="#about" class="btn btn-secondary">تعرف على المكتبة</a>
+                    </div>
+                </div>
+                
+                <div class="featured-section">
+                    <h2 class="section-title">كتب مميزة</h2>
+                    <div class="books-grid" id="featured-books">
+                        <!-- Featured books will be loaded by JavaScript -->
+                    </div>
+                </div>
+                
+                <div class="stats-section">
+                    <div class="stats-container">
+                        <div class="stat-card">
+                            <i class="fas fa-book-open"></i>
+                            <h3 id="total-books-count">0</h3>
+                            <p>كتاب متاح</p>
+                        </div>
+                        <div class="stat-card">
+                            <i class="fas fa-users"></i>
+                            <h3>1,250+</h3>
+                            <p>قارئ نشط</p>
+                        </div>
+                        <div class="stat-card">
+                            <i class="fas fa-hand-holding"></i>
+                            <h3 id="borrowed-books-count">0</h3>
+                            <p>كتاب مستعار</p>
+                        </div>
+                        <div class="stat-card">
+                            <i class="fas fa-calendar-alt"></i>
+                            <h3>365</h3>
+                            <p>يوم مفتوح</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Catalog Page -->
+            <section id="catalog-page" class="page">
+                <div class="page-header">
+                    <h1 class="page-title">فهرس الكتب</h1>
+                    <p class="page-subtitle">استعرض وتصفح جميع الكتب المتاحة في مكتبتنا</p>
+                </div>
+                
+                <div class="catalog-controls">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="search-input" placeholder="ابحث عن كتاب، مؤلف، أو تصنيف...">
+                    </div>
+                    
+                    <div class="filter-controls">
+                        <select id="category-filter" class="filter-select">
+                            <option value="">جميع التصنيفات</option>
+                            <!-- Categories will be populated by JavaScript -->
+                        </select>
+                        
+                        <button id="reset-filters" class="btn btn-outline">
+                            <i class="fas fa-redo"></i> إعادة تعيين
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="books-grid" id="catalog-books">
+                    <!-- Books will be loaded by JavaScript -->
+                </div>
+                
+                <div class="no-results" id="no-results" style="display: none;">
+                    <i class="fas fa-book-open"></i>
+                    <h3>لا توجد كتب تطابق معايير البحث</h3>
+                    <p>حاول تغيير كلمات البحث أو إعادة تعيين الفلاتر</p>
+                </div>
+            </section>
+            
+            <!-- Book Details Page -->
+            <section id="book-details-page" class="page">
+                <div class="page-header">
+                    <button class="btn btn-back" id="back-to-catalog">
+                        <i class="fas fa-arrow-right"></i> العودة إلى الفهرس
+                    </button>
+                    <h1 class="page-title">تفاصيل الكتاب</h1>
+                </div>
+                
+                <div class="book-details-container" id="book-details">
+                    <!-- Book details will be loaded by JavaScript -->
+                </div>
+            </section>
+            
+            <!-- Borrowings Page -->
+            <section id="borrowings-page" class="page">
+                <div class="page-header">
+                    <h1 class="page-title">الاستعارات الحالية</h1>
+                    <p class="page-subtitle">قائمة الكتب التي قمت باستعارتها</p>
+                </div>
+                
+                <div class="borrowings-container">
+                    <div class="borrowings-list" id="borrowings-list">
+                        <!-- Borrowed books will be loaded by JavaScript -->
+                    </div>
+                    
+                    <div class="no-borrowings" id="no-borrowings">
+                        <i class="fas fa-hand-holding"></i>
+                        <h3>لا توجد استعارات حالية</h3>
+                        <p>يمكنك استعارة الكتب من صفحة الفهرس أو تفاصيل الكتاب</p>
+                        <a href="#catalog" class="btn btn-primary">استعرض الكتب المتاحة</a>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Admin Dashboard -->
+            <section id="admin-page" class="page">
+                <div class="page-header">
+                    <h1 class="page-title">لوحة التحكم - المسؤول</h1>
+                    <p class="page-subtitle">إدارة نظام المكتبة والكتب والمستخدمين</p>
+                </div>
+                
+                <div class="admin-dashboard">
+                    <div class="admin-cards">
+                        <div class="admin-card">
+                            <div class="admin-card-icon" style="background-color: #4CAF50;">
+                                <i class="fas fa-book"></i>
+                            </div>
+                            <h3>إدارة الكتب</h3>
+                            <p>إضافة، تعديل، أو حذف الكتب من الفهرس</p>
+                            <a href="#manage-books" class="btn btn-primary">الذهاب إلى الإدارة</a>
+                        </div>
+                        
+                        <div class="admin-card">
+                            <div class="admin-card-icon" style="background-color: #2196F3;">
+                                <i class="fas fa-chart-bar"></i>
+                            </div>
+                            <h3>إحصائيات</h3>
+                            <p>عرض إحصائيات المكتبة والاستعارات</p>
+                            <button class="btn btn-primary" id="view-stats">عرض الإحصائيات</button>
+                        </div>
+                        
+                        <div class="admin-card">
+                            <div class="admin-card-icon" style="background-color: #FF9800;">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <h3>المستخدمين</h3>
+                            <p>إدارة حسابات المستخدمين والصلاحيات</p>
+                            <button class="btn btn-primary" id="manage-users">إدارة المستخدمين</button>
+                        </div>
+                        
+                        <div class="admin-card">
+                            <div class="admin-card-icon" style="background-color: #9C27B0;">
+                                <i class="fas fa-cog"></i>
+                            </div>
+                            <h3>الإعدادات</h3>
+                            <p>تعديل إعدادات النظام والمكتبة</p>
+                            <button class="btn btn-primary" id="system-settings">الإعدادات</button>
+                        </div>
+                    </div>
+                    
+                    <div class="admin-stats" id="admin-stats">
+                        <!-- Admin stats will be loaded by JavaScript -->
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Admin - Manage Books -->
+            <section id="manage-books-page" class="page">
+                <div class="page-header">
+                    <button class="btn btn-back" id="back-to-admin">
+                        <i class="fas fa-arrow-right"></i> العودة إلى لوحة التحكم
+                    </button>
+                    <h1 class="page-title">إدارة الكتب</h1>
+                    <p class="page-subtitle">إضافة، تعديل، أو حذف الكتب من الفهرس</p>
+                </div>
+                
+                <div class="manage-books-container">
+                    <div class="add-book-form">
+                        <h3><i class="fas fa-plus-circle"></i> إضافة كتاب جديد</h3>
+                        <form id="add-book-form">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="book-title">عنوان الكتاب *</label>
+                                    <input type="text" id="book-title" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="book-author">المؤلف *</label>
+                                    <input type="text" id="book-author" required>
+                                </div>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="book-year">سنة النشر</label>
+                                    <input type="number" id="book-year" min="1000" max="2024">
+                                </div>
+                                <div class="form-group">
+                                    <label for="book-category">التصنيف *</label>
+                                    <select id="book-category" required>
+                                        <option value="">اختر تصنيفاً</option>
+                                        <option value="أدب">أدب</option>
+                                        <option value="علوم">علوم</option>
+                                        <option value="تاريخ">تاريخ</option>
+                                        <option value="فلسفة">فلسفة</option>
+                                        <option value="دين">دين</option>
+                                        <option value="تقنية">تقنية</option>
+                                        <option value="أخرى">أخرى</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="book-description">وصف الكتاب</label>
+                                <textarea id="book-description" rows="4"></textarea>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="book-image">رابط صورة الكتاب (اختياري)</label>
+                                    <input type="text" id="book-image" placeholder="https://example.com/book.jpg">
+                                </div>
+                                <div class="form-group">
+                                    <label for="book-isbn">رقم ISBN (اختياري)</label>
+                                    <input type="text" id="book-isbn">
+                                </div>
+                            </div>
+                            
+                            <div class="form-actions">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-save"></i> إضافة الكتاب
+                                </button>
+                                <button type="reset" class="btn btn-outline">
+                                    <i class="fas fa-times"></i> إعادة تعيين
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                    
+                    <div class="books-management">
+                        <h3><i class="fas fa-list"></i> جميع الكتب (<span id="books-count">0</span>)</h3>
+                        <div class="books-table-container">
+                            <table class="books-table">
+                                <thead>
+                                    <tr>
+                                        <th>العنوان</th>
+                                        <th>المؤلف</th>
+                                        <th>التصنيف</th>
+                                        <th>السنة</th>
+                                        <th>الإجراءات</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="books-table-body">
+                                    <!-- Books will be loaded by JavaScript -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Login Page -->
+            <section id="login-page" class="page">
+                <div class="login-container">
+                    <div class="login-card">
+                        <div class="login-header">
+                            <h2><i class="fas fa-user-shield"></i> تسجيل الدخول للمسؤولين</h2>
+                            <p>يجب تسجيل الدخول للوصول إلى لوحة التحكم</p>
+                        </div>
+                        
+                        <form id="login-form">
+                            <div class="form-group">
+                                <label for="username">اسم المستخدم</label>
+                                <div class="input-with-icon">
+                                    <i class="fas fa-user"></i>
+                                    <input type="text" id="username" placeholder="أدخل اسم المستخدم" required>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="password">كلمة المرور</label>
+                                <div class="input-with-icon">
+                                    <i class="fas fa-lock"></i>
+                                    <input type="password" id="password" placeholder="أدخل كلمة المرور" required>
+                                </div>
+                            </div>
+                            
+                            <div class="form-actions">
+                                <button type="submit" class="btn btn-primary btn-block">
+                                    <i class="fas fa-sign-in-alt"></i> تسجيل الدخول
+                                </button>
+                            </div>
+                            
+                            <div class="login-info">
+                                <p><strong>بيانات الدخول للاختبار:</strong></p>
+                                <p>اسم المستخدم: <code>admin</code></p>
+                                <p>كلمة المرور: <code>admin123</code></p>
+                            </div>
+                        </form>
+                        
+                        <div class="login-footer">
+                            <p>العودة إلى <a href="#home" class="text-link">الصفحة الرئيسية</a></p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- Register Page -->
+<section id="register-page" class="page">
+    <div class="register-container">
+        <div class="register-card">
+            <div class="register-header">
+                <h2><i class="fas fa-user-plus"></i> إنشاء حساب جديد</h2>
+                <p>انضم إلى مكتبتنا واستمتع بخدمات الاستعارة</p>
+            </div>
+            
+            <form id="register-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="register-name">الاسم الكامل *</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-user"></i>
+                            <input type="text" id="register-name" placeholder="أدخل اسمك الكامل" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="register-email">البريد الإلكتروني *</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-envelope"></i>
+                            <input type="email" id="register-email" placeholder="example@email.com" required>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="register-username">اسم المستخدم *</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-user-circle"></i>
+                            <input type="text" id="register-username" placeholder="اختر اسم مستخدم" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="register-phone">رقم الهاتف</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-phone"></i>
+                            <input type="tel" id="register-phone" placeholder="05XXXXXXXX">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="register-password">كلمة المرور *</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" id="register-password" placeholder="أدخل كلمة المرور" required>
+                        </div>
+                        <div class="password-strength" id="password-strength">
+                            <div class="strength-bar"></div>
+                            <span class="strength-text">قوة كلمة المرور</span>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="register-confirm-password">تأكيد كلمة المرور *</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" id="register-confirm-password" placeholder="أعد إدخال كلمة المرور" required>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="register-address">العنوان</label>
+                    <div class="input-with-icon">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <textarea id="register-address" rows="2" placeholder="عنوان السكن"></textarea>
+                    </div>
+                </div>
+                
+                <div class="form-check">
+                    <input type="checkbox" id="register-terms" required>
+                    <label for="register-terms">
+                        أوافق على <a href="#terms" class="text-link">الشروط والأحكام</a> و <a href="#privacy" class="text-link">سياسة الخصوصية</a>
+                    </label>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary btn-block">
+                        <i class="fas fa-user-plus"></i> إنشاء الحساب
+                    </button>
+                </div>
+                
+                <div class="register-footer">
+                    <p>هل لديك حساب بالفعل؟ <a href="#login" class="text-link">سجل الدخول هنا</a></p>
+                </div>
+            </form>
+        </div>
+        
+        <div class="register-features">
+            <div class="feature-box">
+                <div class="feature-icon">
+                    <i class="fas fa-book-reader"></i>
+                </div>
+                <h3>استعارة الكتب</h3>
+                <p>يمكنك استعارة حتى 5 كتب في نفس الوقت</p>
+            </div>
+            
+            <div class="feature-box">
+                <div class="feature-icon">
+                    <i class="fas fa-bell"></i>
+                </div>
+                <h3>التنبيهات</h3>
+                <p>تذكير بمواعيد إرجاع الكتب</p>
+            </div>
+            
+            <div class="feature-box">
+                <div class="feature-icon">
+                    <i class="fas fa-heart"></i>
+                </div>
+                <h3>المفضلة</h3>
+                <p>احفظ الكتب المفضلة لديك</p>
+            </div>
+            
+            <div class="feature-box">
+                <div class="feature-icon">
+                    <i class="fas fa-history"></i>
+                </div>
+                <h3>السجل</h3>
+                <p>احتفظ بسجل الكتب التي استعرتها</p>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- User Profile Page -->
+<section id="profile-page" class="page">
+    <div class="profile-header">
+        <div class="profile-avatar">
+            <i class="fas fa-user-circle"></i>
+        </div>
+        <h2 id="profile-name">اسم المستخدم</h2>
+        <div class="profile-role" id="profile-role">مستخدم</div>
+    </div>
+    
+    <div class="profile-content">
+        <div class="profile-info">
+            <h3><i class="fas fa-user"></i> المعلومات الشخصية</h3>
+            <div class="info-grid">
+                <div class="info-item">
+                    <span class="info-label">اسم المستخدم:</span>
+                    <span class="info-value" id="profile-username">user123</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">البريد الإلكتروني:</span>
+                    <span class="info-value" id="profile-email">user@example.com</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">رقم الهاتف:</span>
+                    <span class="info-value" id="profile-phone">05XXXXXXXX</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">العنوان:</span>
+                    <span class="info-value" id="profile-address">-</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">تاريخ التسجيل:</span>
+                    <span class="info-value" id="profile-join-date">2024-01-01</span>
+                </div>
+            </div>
+            
+            <div class="profile-actions">
+                <button class="btn btn-primary" id="edit-profile-btn">
+                    <i class="fas fa-edit"></i> تعديل الملف الشخصي
+                </button>
+                <button class="btn btn-outline" id="change-password-btn">
+                    <i class="fas fa-key"></i> تغيير كلمة المرور
+                </button>
+            </div>
+        </div>
+        
+        <div class="profile-stats">
+            <h3><i class="fas fa-chart-bar"></i> إحصائياتي</h3>
+            <div class="stat-card">
+                <div class="stat-number" id="profile-books-borrowed">0</div>
+                <div class="stat-label">الكتب المستعارة</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="profile-current-borrowed">0</div>
+                <div class="stat-label">الكتب الحالية</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="profile-favorites">0</div>
+                <div class="stat-label">المفضلة</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="profile-days-member">0</div>
+                <div class="stat-label">أيام في المكتبة</div>
+            </div>
+            
+            <div class="recent-activity">
+                <h4><i class="fas fa-history"></i> النشاط الأخير</h4>
+                <div class="activity-list" id="profile-activity">
+                    <!-- سيتم ملؤها بالجافاسكريبت -->
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+            
+            <!-- About Page -->
+            <section id="about-page" class="page">
+                <div class="page-header">
+                    <h1 class="page-title">حول مكتبة المعرفة</h1>
+                    <p class="page-subtitle">تعرف على مهمتنا ورؤيتنا وخدماتنا</p>
+                </div>
+                
+                <div class="about-container">
+                    <div class="about-section">
+                        <div class="about-image">
+                            <div class="image-placeholder">
+                                <i class="fas fa-book-reader"></i>
+                            </div>
+                        </div>
+                        <div class="about-content">
+                            <h2>مهمتنا</h2>
+                            <p>نحن نؤمن بأن المعرفة حق للجميع. تهدف مكتبة المعرفة إلى توفير مصادر معرفية متنوعة ومتاحة للجميع، بما يساهم في بناء مجتمع قارئ ومثقف.</p>
+                            <p>نعمل على تطوير مجموعتنا بشكل مستمر لتشمل أحدث الإصدارات والكلاسيكيات في مختلف المجالات.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="about-section reverse">
+                        <div class="about-content">
+                            <h2>تاريخنا</h2>
+                            <p>تأسست مكتبة المعرفة عام 2010 بمجموعة صغيرة من الكتبر، ونمت على مر السنين لتصبح واحدة من أهم المكتبات الرقمية في المنطقة.</p>
+                            <p>وصل عدد كتبنا اليوم إلى أكثر من 5000 كتاب في مختلف التخصصات، ونخدم آلاف القراء شهرياً.</p>
+                        </div>
+                        <div class="about-image">
+                            <div class="image-placeholder">
+                                <i class="fas fa-history"></i>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="features-grid">
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-book-open"></i>
+                            </div>
+                            <h3>مجموعة واسعة</h3>
+                            <p>أكثر من 5000 كتاب في مختلف التخصصات والمجالات</p>
+                        </div>
+                        
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <h3>متاحة 24/7</h3>
+                            <p>يمكنك الوصول إلى المكتبة في أي وقت ومن أي مكان</p>
+                        </div>
+                        
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-hand-holding-heart"></i>
+                            </div>
+                            <h3>مجانية بالكامل</h3>
+                            <p>جميع خدماتنا مجانية بدون أي رسوم خفية</p>
+                        </div>
+                        
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-user-friends"></i>
+                            </div>
+                            <h3>مجتمع نشط</h3>
+                            <p>انضم إلى مجتمعنا النشط من القراء والمهتمين</p>
+                        </div>
+                    </div>
+                    
+                    <div class="team-section">
+                        <h2 class="section-title">فريق العمل</h2>
+                        <div class="team-grid">
+                            <div class="team-member">
+                                <div class="member-avatar">
+                                    <i class="fas fa-user-tie"></i>
+                                </div>
+                                <h4>أحمد محمد</h4>
+                                <p>مدير المكتبة</p>
+                            </div>
+                            
+                            <div class="team-member">
+                                <div class="member-avatar">
+                                    <i class="fas fa-user-graduate"></i>
+                                </div>
+                                <h4>سارة الخالد</h4>
+                                <p>أمينة المكتبة</p>
+                            </div>
+                            
+                            <div class="team-member">
+                                <div class="member-avatar">
+                                    <i class="fas fa-user-cog"></i>
+                                </div>
+                                <h4>خالد سعيد</h4>
+                                <p>مسؤول التقنية</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Contact / FAQ Page -->
+            <section id="contact-page" class="page">
+                <div class="page-header">
+                    <h1 class="page-title">اتصل بنا</h1>
+                    <p class="page-subtitle">يسعدنا تواصلكم معنا لأي استفسار أو ملاحظة</p>
+                </div>
+                
+                <div class="contact-container">
+                    <div class="contact-form-section">
+                        <h2>أرسل رسالة</h2>
+                        <form id="contact-form">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="contact-name">الاسم الكامل *</label>
+                                    <input type="text" id="contact-name" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="contact-email">البريد الإلكتروني *</label>
+                                    <input type="email" id="contact-email" required>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="contact-subject">الموضوع *</label>
+                                <input type="text" id="contact-subject" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="contact-message">الرسالة *</label>
+                                <textarea id="contact-message" rows="5" required></textarea>
+                            </div>
+                            
+                            <div class="form-actions">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-paper-plane"></i> إرسال الرسالة
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                    
+                    <div class="contact-info-section">
+                        <div class="info-card">
+                            <h2>معلومات التواصل</h2>
+                            
+                            <div class="contact-info">
+                                <div class="contact-item">
+                                    <div class="contact-icon">
+                                        <i class="fas fa-map-marker-alt"></i>
+                                    </div>
+                                    <div class="contact-details">
+                                        <h4>العنوان</h4>
+                                        <p>شارع المعرفة، المدينة، المملكة العربية السعودية</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="contact-item">
+                                    <div class="contact-icon">
+                                        <i class="fas fa-phone"></i>
+                                    </div>
+                                    <div class="contact-details">
+                                        <h4>الهاتف</h4>
+                                        <p>+966 11 123 4567</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="contact-item">
+                                    <div class="contact-icon">
+                                        <i class="fas fa-envelope"></i>
+                                    </div>
+                                    <div class="contact-details">
+                                        <h4>البريد الإلكتروني</h4>
+                                        <p>info@library.com</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="contact-item">
+                                    <div class="contact-icon">
+                                        <i class="fas fa-clock"></i>
+                                    </div>
+                                    <div class="contact-details">
+                                        <h4>ساعات العمل</h4>
+                                        <p>الأحد - الخميس: 8 صباحاً - 8 مساءً</p>
+                                        <p>الجمعة - السبت: 10 صباحاً - 6 مساءً</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="faq-section">
+                    <h2 class="section-title">الأسئلة الشائعة</h2>
+                    
+                    <div class="faq-container">
+                        <div class="faq-item">
+                            <div class="faq-question">
+                                <h3>كيف يمكنني استعارة كتاب؟</h3>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="faq-answer">
+                                <p>يمكنك استعارة كتاب عن طريق الانتقال إلى صفحة الفهرس، اختيار الكتاب الذي ترغب باستعارته، ثم النقر على زر "استعارة هذا الكتاب" في صفحة تفاصيل الكتاب.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="faq-item">
+                            <div class="faq-question">
+                                <h3>كم مدة الاستعارة المسموح بها؟</h3>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="faq-answer">
+                                <p>مدة الاستعارة القياسية هي 14 يوماً. يمكنك تجديد الاستعارة لمدة 7 أيام إضافية إذا لم يكن الكتاب مطلوباً من قبل مستخدم آخر.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="faq-item">
+                            <div class="faq-question">
+                                <h3>هل هناك رسوم على الاستعارة؟</h3>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="faq-answer">
+                                <p>لا، جميع خدمات الاستعارة مجانية بالكامل. نحن نؤمن بأن المعرفة يجب أن تكون متاحة للجميع بدون أي عوائق مادية.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="faq-item">
+                            <div class="faq-question">
+                                <h3>كيف يمكنني العودة إلى كتاب مستعار؟</h3>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="faq-answer">
+                                <p>يمكنك عرض جميع الكتب المستعارة في صفحة "الاستعارات"، ثم النقر على زر "إرجاع الكتاب" بجانب الكتاب الذي ترغب في إرجاعه.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="faq-item">
+                            <div class="faq-question">
+                                <h3>هل يمكنني اقتراح إضافة كتاب معين؟</h3>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="faq-answer">
+                                <p>نعم، يمكنك اقتراح إضافة كتب عن طريق التواصل معنا عبر صفحة "اتصل بنا". نحن نقدر جميع الاقتراحات ونسعى لتلبية طلبات القراء.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>مكتبة المعرفة</h3>
+                    <p>نوفر مصادر معرفية متنوعة للقراء والباحثين. نحن نؤمن بأن المعرفة حق للجميع.</p>
+                    <div class="social-links">
+                        <a href="#" aria-label="فيسبوك"><i class="fab fa-facebook"></i></a>
+                        <a href="#" aria-label="تويتر"><i class="fab fa-twitter"></i></a>
+                        <a href="#" aria-label="إنستغرام"><i class="fab fa-instagram"></i></a>
+                        <a href="#" aria-label="يوتيوب"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>روابط سريعة</h3>
+                    <ul class="footer-links">
+                        <li><a href="#home">الرئيسية</a></li>
+                        <li><a href="#catalog">فهرس الكتب</a></li>
+                        <li><a href="#borrowings">الاستعارات</a></li>
+                        <li><a href="#about">حول المكتبة</a></li>
+                        <li><a href="#contact">اتصل بنا</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>التصنيفات</h3>
+                    <ul class="footer-links" id="footer-categories">
+                        <!-- Categories will be loaded by JavaScript -->
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>النشرة البريدية</h3>
+                    <p>اشترك في نشرتنا البريدية لتصلك آخر الإضافات والعروض.</p>
+                    <div class="newsletter">
+                        <input type="email" placeholder="بريدك الإلكتروني">
+                        <button class="btn btn-primary">اشتراك</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>جميع الحقوق محفوظة &copy; 2024 مكتبة المعرفة. تم التطوير بحب للمعرفة.</p>
+                <p>هذا المشروع تعليمي، تم بناؤه باستخدام HTML، CSS، و JavaScript فقط.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript Files -->
+    <script src="scripts/app.js"></script>
+</body>
+</html>
